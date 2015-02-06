@@ -1,0 +1,39 @@
+Ändert man bei einem Rezept nur Availables und bei einem anderen auch grunddaten werden beide bei der Abfrage beim speichern genannt
+
+bei Änderungen Verwerfen kam eine Constraint Exception
+--> außerdem beim Speichern während des editierens und dann verwerfen
+---> beim verwerfen nimmt die Zelle wieder den alten Wert an
+---> beim speichern darauf fragt, ob der verworfene neue Wert übernommen werden soll
+----> Beim Änderung verwerfen haben die Ingredients zur Laufzeit noch den neuen Wert.
+-----> angezeigt wird aber der alte aus der Datenbank
+
+Im Details View die Buttons entsprechend der Selection aktivieren.
+
+Allgemeine Ansicht mit nur den Rezepten
+
+Editieransicht bei doppelklick oder bei neuen rezepten
+
+bei Zutaten autovervollstÃ¤ndigung
+bei Zutaten mÃ¶glichkeit bieten aus Liste den Namen und Abteilung zu wÃ¤hlen
+
+Durcken im DayPlan andere ansicht
+--> fÃ¼r jedes Rezept einen Abschnitt mit TextArea und Table
+---> Damit kann man besser Zutaten und Rezepte zuordnen.
+--> Listen von JTextArea und JTable, damit die Daten zum Drucken
+verfÃ¼gbar sind
+
+undoable fÃ¼r direkte Ã¤nderungen bei Ingredients
+--> undoableEdit im completeIngredient update erzeugen
+---> oder davor im IngredientModelListener
+--> undoableEdit im SetValue erzeugen
+---> http://www.jroller.com/nweber/entry/undo_in_jtable
+--> Damit Ã¤nderungen RÃ¼ckgÃ¼ngig machen, die durch Ã¤nderungen am model an
+allen zutaten durchgefÃ¼hrt wurden.
+
+Datenbankänderung:
+Tabelle Ingredient mit Name StorePlace Available
+--> alles andere fliegt hier raus
+Tabelle Zutaten mit Ingredient Menge Reihenfolge Rezept
+--> kann man in die mapping Liste Ingred<->Recipe übertragen
+
+Performance:

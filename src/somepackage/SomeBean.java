@@ -1,6 +1,16 @@
 package somepackage;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import javax.faces.bean.*;
+import javax.swing.JOptionPane;
+
+import mainwindow.MainWindow;
+
+import org.eclipse.jdt.internal.compiler.batch.Main;
+
+import util.XMLConfigurationLoader;
 
 @ManagedBean
 public class SomeBean {
