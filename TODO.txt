@@ -1,3 +1,17 @@
+------------------------------- TODO, Rezepttool -------------------------------
+personalisierte Anmeldung und Rezepte
+--> entsrepchende Datenbankänderungen
+
+Link zum original Rezept, wenn vorhanden.
+
+Einkaufsliste live auf der Seite anzeigen, mit Möglichkeit einzelne Zutaten abzuhaken.
+
+Möglichkeit bieten Rezepte zu teilen.
+--> anderen leuten empfehlen
+--> alle rezepte einsehbar
+
+--------------------------- TODO, Einkaufslistentool ---------------------------
+
 Ändert man bei einem Rezept nur Availables und bei einem anderen auch grunddaten werden beide bei der Abfrage beim speichern genannt
 
 bei Änderungen Verwerfen kam eine Constraint Exception
