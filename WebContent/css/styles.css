@@ -65,3 +65,13 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 [align="center"] li {
   list-style-position: inside;
 }
+
+/* New */
+.ui-tabs {
+	width: 100%;
+	position:absolute;
+	bottom:0;
+}
+.ui-autocomplete-input{
+	width:300px;
+}
