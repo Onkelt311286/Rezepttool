@@ -1,4 +1,6 @@
 ------------------------------- TODO, Rezepttool -------------------------------
+Art der Mahlzeit und Kategorie zusammenführen
+
 personalisierte Anmeldung und Rezepte
 --> entsrepchende Datenbankänderungen
 
@@ -9,6 +11,8 @@ Einkaufsliste live auf der Seite anzeigen, mit Möglichkeit einzelne Zutaten abzu
 Möglichkeit bieten Rezepte zu teilen.
 --> anderen leuten empfehlen
 --> alle rezepte einsehbar
+
+Die configdatei muss da sein, ein automatisches anlegen einer neuen funktioniert nicht.
 
 --------------------------- TODO, Einkaufslistentool ---------------------------
 
