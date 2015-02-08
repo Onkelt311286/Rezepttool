@@ -28,6 +28,8 @@ import dialog.DialogGetRecipe;
 import dialog.DialogPrintPreview;
 
 public class HeaderToolBar extends JToolBar {
+  
+  private static final String IconLocation = "WebContent/images/icons/";
 
   private MainUndoManager _undoManager;
   private MainWindow      mainWindow;
@@ -55,45 +57,45 @@ public class HeaderToolBar extends JToolBar {
 
     // addRecipe = new JButton(languageBundle.getString("AddRecipe"), new
     // ImageIcon("ressources/icons/add_bg.png"));
-    addRecipe = new JButton(new ImageIcon(((new ImageIcon("ressources/icons/add_recipe.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+    addRecipe = new JButton(new ImageIcon(((new ImageIcon(IconLocation + "add_recipe.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
     add(addRecipe);
     // deleteRecipe = new JButton(languageBundle.getString("DeleteRecipe"));
     // add(deleteRecipe);
     // deleteSelectedRecipe = new
     // JButton(languageBundle.getString("DeleteSelectedRecipe"));
-    deleteSelectedRecipe = new JButton(new ImageIcon(((new ImageIcon("ressources/icons/remove_recipe.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+    deleteSelectedRecipe = new JButton(new ImageIcon(((new ImageIcon(IconLocation + "remove_recipe.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
     add(deleteSelectedRecipe);
     addSeparator();
 
     // addIngredient = new JButton(languageBundle.getString("AddIngredient"));
-    addIngredient = new JButton(new ImageIcon(((new ImageIcon("ressources/icons/add_pot.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+    addIngredient = new JButton(new ImageIcon(((new ImageIcon(IconLocation + "add_pot.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
     add(addIngredient);
     // deleteIngredient = new
     // JButton(languageBundle.getString("DeleteIngredient"));
     // add(deleteIngredient);
     // deleteSelectedIngredient = new
     // JButton(languageBundle.getString("DeleteSelectedIngredient"));
-    deleteSelectedIngredient = new JButton(new ImageIcon(((new ImageIcon("ressources/icons/remove_pot.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+    deleteSelectedIngredient = new JButton(new ImageIcon(((new ImageIcon(IconLocation + "remove_pot.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
     add(deleteSelectedIngredient);
     addSeparator();
 
     // undo = new JButton(languageBundle.getString("Undo"));
-    undo = new JButton(new ImageIcon(((new ImageIcon("ressources/icons/undone_bg.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+    undo = new JButton(new ImageIcon(((new ImageIcon(IconLocation + "undone_bg.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
     add(undo);
     _undoManager.watchUndoComponent(undo);
     // redo = new JButton(languageBundle.getString("Redo"));
-    redo = new JButton(new ImageIcon(((new ImageIcon("ressources/icons/redone_bg.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+    redo = new JButton(new ImageIcon(((new ImageIcon(IconLocation + "redone_bg.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
     add(redo);
     _undoManager.watchRedoComponent(redo);
     addSeparator();
 
     // print = new JButton(languageBundle.getString("Print"));
-    print = new JButton(new ImageIcon(((new ImageIcon("ressources/icons/print_bg.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+    print = new JButton(new ImageIcon(((new ImageIcon(IconLocation + "print_bg.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
     add(print);
     addSeparator();
 
 //    save = new JButton(languageBundle.getString("Save"));
-    save = new JButton(new ImageIcon(((new ImageIcon("ressources/icons/save_bg.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+    save = new JButton(new ImageIcon(((new ImageIcon(IconLocation + "save_bg.png")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
     add(save);
 
     activateHue = new JCheckBox(languageBundle.getString("SetHued"), true);
