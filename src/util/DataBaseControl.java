@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
@@ -26,7 +27,6 @@ import javax.swing.JTextField;
 import recipedetails.recipe.RecipeDetailsModel;
 import recipefinder.ingredient.IngredientFinderModel;
 import recipefinder.recipe.RecipeFinderModel;
-
 import mainwindow.data.DayPlan;
 import mainwindow.data.Ingredient;
 import mainwindow.data.Recipe;
@@ -57,61 +57,58 @@ public class DataBaseControl {
     }
     _dataBaseName = "jdbc:h2:" + _dataBaseName + "\\RecipeDB" + ";MV_STORE=FALSE;MVCC=FALSE";
 
-    InitializeDataBase();
+    // InitializeDataBase();
   }
 
-  public boolean connect() {
-    boolean success = false;
-    try {
-      _connection = DriverManager.getConnection(_dataBaseName, userName, userPassword);
-      _statement = _connection.createStatement();
-      success = true;
-    }
-    catch (SQLException e) {
-      JOptionPane.showMessageDialog(null, e.toString(), languageBundle.getString("NoDBConnectTitle"), JOptionPane.ERROR_MESSAGE);
-      disconnect();
-    }
-    return success;
-  }
+  // public boolean connect() {
+  // boolean success = false;
+  // try {
+  // Class.forName("org.h2.Driver");
+  // _connection = DriverManager.getConnection(_dataBaseName, userName,
+  // userPassword);
+  // _statement = _connection.createStatement();
+  // System.out.println("opening");
+  // success = true;
+  // }
+  // catch (SQLException | ClassNotFoundException e) {
+  // e.printStackTrace();
+  // JOptionPane.showMessageDialog(null, e.toString(),
+  // languageBundle.getString("NoDBConnectTitle"), JOptionPane.ERROR_MESSAGE);
+  // disconnect();
+  // }
+  // return success;
+  // }
 
-  public void disconnect() {
-    if (existsConnection()) try {
-      _connection.close();
-    }
-    catch (SQLException e) {
-      JOptionPane.showMessageDialog(null, e.toString(), languageBundle.getString("NoDBDiconnectTitle"), JOptionPane.ERROR_MESSAGE);
-    }
-  }
+  // public void disconnect() {
+  // try {
+  // System.out.println("closing");
+  // _connection.close();
+  // }
+  // catch (SQLException e) {
+  // JOptionPane.showMessageDialog(null, e.toString(),
+  // languageBundle.getString("NoDBDiconnectTitle"), JOptionPane.ERROR_MESSAGE);
+  // }
+  // }
 
   public boolean executeUpdate(String query) {
     boolean result = false;
-    if (existsConnection()) {
-      try {
-        _statement.executeUpdate(query);
-        result = true;
-      }
-      catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, e.toString() + " \n " + query, languageBundle.getString("NoSQLUpdateTitle"), JOptionPane.ERROR_MESSAGE);
-      }
+    try {
+      _statement.executeUpdate(query);
+      result = true;
     }
-    else {
-      JOptionPane.showMessageDialog(null, languageBundle.getString("NoDBConnectionMessage"), languageBundle.getString("NoSQLUpdateTitle"), JOptionPane.ERROR_MESSAGE);
+    catch (SQLException e) {
+      JOptionPane.showMessageDialog(null, e.toString() + " \n " + query, languageBundle.getString("NoSQLUpdateTitle"), JOptionPane.ERROR_MESSAGE);
     }
     return result;
   }
 
   public ResultSet executeQuery(String query) {
     ResultSet result = null;
-    if (existsConnection()) {
-      try {
-        result = _statement.executeQuery(query);
-      }
-      catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, e.toString() + " \n " + query, languageBundle.getString("NoSQLQueryTitle"), JOptionPane.ERROR_MESSAGE);
-      }
+    try {
+      result = _statement.executeQuery(query);
     }
-    else {
-      JOptionPane.showMessageDialog(null, languageBundle.getString("NoDBConnectionMessage"), languageBundle.getString("NoSQLQueryTitle"), JOptionPane.ERROR_MESSAGE);
+    catch (SQLException e) {
+      JOptionPane.showMessageDialog(null, e.toString() + " \n " + query, languageBundle.getString("NoSQLQueryTitle"), JOptionPane.ERROR_MESSAGE);
     }
     return result;
   }
@@ -135,68 +132,111 @@ public class DataBaseControl {
     return result;
   }
 
-  public void InitializeDataBase() {
-    if (connect()) {
-      // executeUpdate("DROP TABLE IF EXISTS Recipes");
-      // executeUpdate("DROP TABLE IF EXISTS Ingredients");
-      // executeUpdate("DROP TABLE IF EXISTS Recipes_Ingredients");
-      // executeUpdate("DROP TABLE IF EXISTS Date_Recipes");
+  // public void InitializeDataBase() {
+  // if (connect()) {
+  // // executeUpdate("DROP TABLE IF EXISTS Recipes");
+  // // executeUpdate("DROP TABLE IF EXISTS Ingredients");
+  // // executeUpdate("DROP TABLE IF EXISTS Recipes_Ingredients");
+  // // executeUpdate("DROP TABLE IF EXISTS Date_Recipes");
+  //
+  // executeUpdate("CREATE TABLE IF NOT EXISTS Recipes (Recipe_ID INT PRIMARY KEY AUTO_INCREMENT(1,1) NOT NULL, Name VARCHAR(255), Used BIT, Formula VARCHAR(MAX), Duration VARCHAR(255), Type VARCHAR(255), KindOfMeal INT NOT NULL)");
+  // executeUpdate("CREATE TABLE IF NOT EXISTS Ingredients (Ingredient_ID INT PRIMARY KEY AUTO_INCREMENT(1,1) NOT NULL, Name VARCHAR(255), Amount VARCHAR(255), Recipe INT REFERENCES Recipes(Recipe_ID), Available BIT, OrderInRecipe INT NOT NULL, StorePlace VARCHAR(255))");
+  // executeUpdate("CREATE TABLE IF NOT EXISTS Recipes_Ingredients (Recipe INT REFERENCES Recipes(Recipe_ID), Ingredient INT REFERENCES Ingredients(Ingredient_ID))");
+  // executeUpdate("CREATE TABLE IF NOT EXISTS Date_Recipes (Day VARCHAR(10) NOT NULL, Recipe INT REFERENCES Recipes(Recipe_ID))");
+  // //
+  // executeUpdate("CREATE TABLE IF NOT EXISTS IngredientNames (Name VARCHAR(255) PRIMARY KEY, StorePlace VARCHAR(255), Available BIT)");
+  // disconnect();
+  // }
+  // else {
+  // JOptionPane.showMessageDialog(null,
+  // languageBundle.getString("NoDBConnectionMessage"),
+  // languageBundle.getString("NoDBConnectTitle"), JOptionPane.ERROR_MESSAGE);
+  // }
+  // }
 
-      executeUpdate("CREATE TABLE IF NOT EXISTS Recipes (Recipe_ID INT PRIMARY KEY AUTO_INCREMENT(1,1) NOT NULL, Name VARCHAR(255), Used BIT, Formula VARCHAR(MAX), Duration VARCHAR(255), Type VARCHAR(255), KindOfMeal INT NOT NULL)");
-      executeUpdate("CREATE TABLE IF NOT EXISTS Ingredients (Ingredient_ID INT PRIMARY KEY AUTO_INCREMENT(1,1) NOT NULL, Name VARCHAR(255), Amount VARCHAR(255), Recipe INT REFERENCES Recipes(Recipe_ID), Available BIT, OrderInRecipe INT NOT NULL, StorePlace VARCHAR(255))");
-      executeUpdate("CREATE TABLE IF NOT EXISTS Recipes_Ingredients (Recipe INT REFERENCES Recipes(Recipe_ID), Ingredient INT REFERENCES Ingredients(Ingredient_ID))");
-      executeUpdate("CREATE TABLE IF NOT EXISTS Date_Recipes (Day VARCHAR(10) NOT NULL, Recipe INT REFERENCES Recipes(Recipe_ID))");
-      // executeUpdate("CREATE TABLE IF NOT EXISTS IngredientNames (Name VARCHAR(255) PRIMARY KEY, StorePlace VARCHAR(255), Available BIT)");
-      disconnect();
-    }
-    else {
-      JOptionPane.showMessageDialog(null, languageBundle.getString("NoDBConnectionMessage"), languageBundle.getString("NoDBConnectTitle"), JOptionPane.ERROR_MESSAGE);
-    }
-  }
+  public List<Recipe> loadRecipeData(String query) {
+    List<Recipe> recipes = new ArrayList<Recipe>();
+    try {
+      Class.forName("org.h2.Driver");
+      _connection = DriverManager.getConnection(_dataBaseName, userName, userPassword);
+      _statement = _connection.createStatement();
 
-  public void loadRecipeData(RecipeDetailsModel detailsModel, RecipeFinderModel finderModel) {
-    if (connect()) {
-      ResultSet selectRecipes = executeQuery("SELECT Recipe_ID FROM Recipes");
+      query = query.replace("'", "''");
+
+      ResultSet selectRecipes = executeQuery("SELECT Recipe_ID FROM Recipes WHERE UPPER(Name) like '%" + query + "%';");
       ArrayList<ArrayList<Object>> resultSelectRecipes = extractResultData(selectRecipes, 1);
       for (ArrayList<Object> recipeRow : resultSelectRecipes) {
         int id = (Integer) recipeRow.get(0);
         Recipe recipe = loadRecipe(id);
-        detailsModel.addRow(recipe, false);
-        finderModel.addRow(recipe, false);
+        recipes.add(recipe);
       }
-      disconnect();
     }
-    else {
-      JOptionPane.showMessageDialog(null, languageBundle.getString("NoDBConnectionMessage"), languageBundle.getString("NoDBConnectTitle"), JOptionPane.ERROR_MESSAGE);
+    catch (ClassNotFoundException | SQLException e) {
+      System.out.println("Failed to load Recipes");
+      e.printStackTrace();
     }
+    finally {
+      try {
+        _connection.close();
+      }
+      catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+    return recipes;
+  }
+
+  public void loadRecipeData(RecipeDetailsModel detailsModel, RecipeFinderModel finderModel) {
+    // if (connect()) {
+    // ResultSet selectRecipes = executeQuery("SELECT Recipe_ID FROM Recipes");
+    // ArrayList<ArrayList<Object>> resultSelectRecipes =
+    // extractResultData(selectRecipes, 1);
+    // for (ArrayList<Object> recipeRow : resultSelectRecipes) {
+    // int id = (Integer) recipeRow.get(0);
+    // Recipe recipe = loadRecipe(id);
+    // detailsModel.addRow(recipe, false);
+    // finderModel.addRow(recipe, false);
+    // }
+    // disconnect();
+    // }
+    // else {
+    // JOptionPane.showMessageDialog(null,
+    // languageBundle.getString("NoDBConnectionMessage"),
+    // languageBundle.getString("NoDBConnectTitle"), JOptionPane.ERROR_MESSAGE);
+    // }
   }
 
   public void loadIngredientData(IngredientFinderModel ingredFinderModel) {
-    if (connect()) {
-      ResultSet selectIngredientName = executeQuery("SELECT Name, StorePlace, Ingredient_ID FROM Ingredients;");
-      ArrayList<ArrayList<Object>> resultSelectDayPlan = extractResultData(selectIngredientName, 3);
-      for (ArrayList<Object> row : resultSelectDayPlan) {
-        String name = (String) row.get(0);
-        String storePlace = (String) row.get(1);
-        if(storePlace == null) storePlace = "";
-        int id = (int) row.get(2);
-        boolean contains = false;
-        for (Ingredient ingred : ingredFinderModel.getIngredients()) {
-          if (ingred.getName().equals(name) && ingred.getStorePlace().equals(storePlace)) {
-            contains = true;
-          }
-        }
-        if (!contains) {
-          ingredFinderModel.addRow(loadIngredient(null, id), false);
-        }
-      }
-    }
-    else {
-      JOptionPane.showMessageDialog(null, languageBundle.getString("NoDBConnectionMessage"), languageBundle.getString("NoDBConnectTitle"), JOptionPane.ERROR_MESSAGE);
-    }
+    // if (connect()) {
+    // ResultSet selectIngredientName =
+    // executeQuery("SELECT Name, StorePlace, Ingredient_ID FROM Ingredients;");
+    // ArrayList<ArrayList<Object>> resultSelectDayPlan =
+    // extractResultData(selectIngredientName, 3);
+    // for (ArrayList<Object> row : resultSelectDayPlan) {
+    // String name = (String) row.get(0);
+    // String storePlace = (String) row.get(1);
+    // if (storePlace == null) storePlace = "";
+    // int id = (int) row.get(2);
+    // boolean contains = false;
+    // for (Ingredient ingred : ingredFinderModel.getIngredients()) {
+    // if (ingred.getName().equals(name) &&
+    // ingred.getStorePlace().equals(storePlace)) {
+    // contains = true;
+    // }
+    // }
+    // if (!contains) {
+    // ingredFinderModel.addRow(loadIngredient(null, id), false);
+    // }
+    // }
+    // }
+    // else {
+    // JOptionPane.showMessageDialog(null,
+    // languageBundle.getString("NoDBConnectionMessage"),
+    // languageBundle.getString("NoDBConnectTitle"), JOptionPane.ERROR_MESSAGE);
+    // }
   }
 
-  public Recipe loadRecipe(int id) {   
+  public Recipe loadRecipe(int id) {
     Recipe recipe = null;
     ResultSet selectRecipe = executeQuery("SELECT Name, Used, Formula, Duration, Type, KindOfMeal FROM Recipes WHERE Recipe_ID = " + id + ";");
     ArrayList<ArrayList<Object>> resultSelectRecipes = extractResultData(selectRecipe, 6);
@@ -233,99 +273,109 @@ public class DataBaseControl {
 
   private long calculateFrequency(int id) {
     long result = 0;
-    if (connect()) {
-      ResultSet selectIngredientIDs = executeQuery("SELECT COUNT(Recipe) FROM Date_Recipes WHERE Recipe = " + id + ";");
-      ArrayList<ArrayList<Object>> resultSelectIngredientIDs = extractResultData(selectIngredientIDs, 1);
-      for (ArrayList<Object> idRow : resultSelectIngredientIDs) {
-        result = (Long) idRow.get(0);
-      }
-    }
-    else {
-      JOptionPane.showMessageDialog(null, languageBundle.getString("NoDBConnectionMessage"), languageBundle.getString("NoDBConnectTitle"), JOptionPane.ERROR_MESSAGE);
+    ResultSet selectIngredientIDs = executeQuery("SELECT COUNT(Recipe) FROM Date_Recipes WHERE Recipe = " + id + ";");
+    ArrayList<ArrayList<Object>> resultSelectIngredientIDs = extractResultData(selectIngredientIDs, 1);
+    for (ArrayList<Object> idRow : resultSelectIngredientIDs) {
+      result = (Long) idRow.get(0);
     }
     return result;
   }
 
   public DayPlan loadDayPlanData(RecipeDetailsModel model, int dayFromToday) {
     DayPlan result = null;
-    if (connect()) {
-      Date date = new Date();
-      Calendar c = Calendar.getInstance();
-      c.setTime(date);
-      c.add(Calendar.DATE, dayFromToday);
-      date = c.getTime();
-      String dateString = ToolConstants.getDateString(date, true);
-      DayPlan dayPlan = new DayPlan(date);
-      ResultSet selectDayPlan = executeQuery("SELECT * FROM Date_Recipes WHERE Day = '" + dateString + "';");
-      ArrayList<ArrayList<Object>> resultSelectDayPlan = extractResultData(selectDayPlan, 2);
-      for (ArrayList<Object> recipeRow : resultSelectDayPlan) {
-        int id = (Integer) recipeRow.get(1);
-        dayPlan.addRecipe(model.getRecipeByID(id));
-      }
-      result = dayPlan;
-      disconnect();
-    }
-    else {
-      JOptionPane.showMessageDialog(null, languageBundle.getString("NoDBConnectionMessage"), languageBundle.getString("NoDBConnectTitle"), JOptionPane.ERROR_MESSAGE);
-    }
+    // if (connect()) {
+    // Date date = new Date();
+    // Calendar c = Calendar.getInstance();
+    // c.setTime(date);
+    // c.add(Calendar.DATE, dayFromToday);
+    // date = c.getTime();
+    // String dateString = ToolConstants.getDateString(date, true);
+    // DayPlan dayPlan = new DayPlan(date);
+    // ResultSet selectDayPlan =
+    // executeQuery("SELECT * FROM Date_Recipes WHERE Day = '" + dateString +
+    // "';");
+    // ArrayList<ArrayList<Object>> resultSelectDayPlan =
+    // extractResultData(selectDayPlan, 2);
+    // for (ArrayList<Object> recipeRow : resultSelectDayPlan) {
+    // int id = (Integer) recipeRow.get(1);
+    // dayPlan.addRecipe(model.getRecipeByID(id));
+    // }
+    // result = dayPlan;
+    // disconnect();
+    // }
+    // else {
+    // JOptionPane.showMessageDialog(null,
+    // languageBundle.getString("NoDBConnectionMessage"),
+    // languageBundle.getString("NoDBConnectTitle"), JOptionPane.ERROR_MESSAGE);
+    // }
     return result;
   }
 
   public void storeRecipes(ArrayList<Recipe> recipes) {
-    connect();
-    removeDeleteRecipe(recipes);
-
-    boolean onlyIngredAvailabilityChanged = true;
-    HashMap<Recipe, String> alteredRecipes = new HashMap<Recipe, String>();
-    String alteredRecipeString = "";
-    for (Recipe recipe : recipes) {
-      if (isRecipeAltered(recipe)) {
-        String changedValues = generateChangeMessage(recipe);
-        if (!changedValues.equals("")) {
-          changedValues = changedValues.substring(0, changedValues.length() - 2);
-          onlyIngredAvailabilityChanged = false;
-        }
-        changedValues = languageBundle.getString("UpdateRecipeMessage") + ": \"" + recipe.getName() + "\"" + "\n" + changedValues;
-        alteredRecipes.put(recipe, changedValues);
-        if(!onlyIngredAvailabilityChanged){
-          alteredRecipeString += recipe.getName() + "\n";
-        }
-      }
-    }
-
-    if (alteredRecipes.size() > 0) {
-      JPanel dialogPanel = new JPanel();
-      dialogPanel.setPreferredSize(new Dimension(100,250));
-      dialogPanel.setLayout(new BorderLayout());
-      JTextArea recipeListArea = new JTextArea(alteredRecipeString);
-      recipeListArea.setEditable(false);
-      JScrollPane recipeListScrollPane = new JScrollPane(recipeListArea);
-      dialogPanel.add(recipeListScrollPane, BorderLayout.CENTER);
-      int option = 0;
-      if(!onlyIngredAvailabilityChanged){
-        Object[] message = { languageBundle.getString("AlteredRecipes"), dialogPanel };
-        Object[] options = { languageBundle.getString("SaveALL"), languageBundle.getString("ChooseForEach"), languageBundle.getString("Discard") };
-        option = JOptionPane.showOptionDialog(null, message, languageBundle.getString("UpdateALLRecipesTitle"), JOptionPane.PLAIN_MESSAGE, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-      }
-      if (option == 0) {
-        for (Entry<Recipe, String> entry : alteredRecipes.entrySet()) {
-          storeRecipe(entry.getKey());
-        }
-      }
-      else if (option == 1) {
-        for (Entry<Recipe, String> entry : alteredRecipes.entrySet()) {
-          int singleRecipeDialogResult = JOptionPane.YES_OPTION;
-          if(entry.getKey().getValueChangedMap().get(9) == false){
-            singleRecipeDialogResult = JOptionPane.showConfirmDialog(null, entry.getValue(), languageBundle.getString("UpdateRecipeTitle"), JOptionPane.YES_NO_OPTION);
-          }
-          if (singleRecipeDialogResult == JOptionPane.YES_OPTION) {
-            storeRecipe(entry.getKey());
-          }
-        }
-      }
-    }
-
-    disconnect();
+    // connect();
+    // removeDeleteRecipe(recipes);
+    //
+    // boolean onlyIngredAvailabilityChanged = true;
+    // HashMap<Recipe, String> alteredRecipes = new HashMap<Recipe, String>();
+    // String alteredRecipeString = "";
+    // for (Recipe recipe : recipes) {
+    // if (isRecipeAltered(recipe)) {
+    // String changedValues = generateChangeMessage(recipe);
+    // if (!changedValues.equals("")) {
+    // changedValues = changedValues.substring(0, changedValues.length() - 2);
+    // onlyIngredAvailabilityChanged = false;
+    // }
+    // changedValues = languageBundle.getString("UpdateRecipeMessage") + ": \""
+    // +
+    // recipe.getName() + "\"" + "\n" + changedValues;
+    // alteredRecipes.put(recipe, changedValues);
+    // if (!onlyIngredAvailabilityChanged) {
+    // alteredRecipeString += recipe.getName() + "\n";
+    // }
+    // }
+    // }
+    //
+    // if (alteredRecipes.size() > 0) {
+    // JPanel dialogPanel = new JPanel();
+    // dialogPanel.setPreferredSize(new Dimension(100, 250));
+    // dialogPanel.setLayout(new BorderLayout());
+    // JTextArea recipeListArea = new JTextArea(alteredRecipeString);
+    // recipeListArea.setEditable(false);
+    // JScrollPane recipeListScrollPane = new JScrollPane(recipeListArea);
+    // dialogPanel.add(recipeListScrollPane, BorderLayout.CENTER);
+    // int option = 0;
+    // if (!onlyIngredAvailabilityChanged) {
+    // Object[] message = { languageBundle.getString("AlteredRecipes"),
+    // dialogPanel };
+    // Object[] options = { languageBundle.getString("SaveALL"),
+    // languageBundle.getString("ChooseForEach"),
+    // languageBundle.getString("Discard") };
+    // option = JOptionPane.showOptionDialog(null, message,
+    // languageBundle.getString("UpdateALLRecipesTitle"),
+    // JOptionPane.PLAIN_MESSAGE, JOptionPane.QUESTION_MESSAGE, null, options,
+    // options[0]);
+    // }
+    // if (option == 0) {
+    // for (Entry<Recipe, String> entry : alteredRecipes.entrySet()) {
+    // storeRecipe(entry.getKey());
+    // }
+    // }
+    // else if (option == 1) {
+    // for (Entry<Recipe, String> entry : alteredRecipes.entrySet()) {
+    // int singleRecipeDialogResult = JOptionPane.YES_OPTION;
+    // if (entry.getKey().getValueChangedMap().get(9) == false) {
+    // singleRecipeDialogResult = JOptionPane.showConfirmDialog(null,
+    // entry.getValue(), languageBundle.getString("UpdateRecipeTitle"),
+    // JOptionPane.YES_NO_OPTION);
+    // }
+    // if (singleRecipeDialogResult == JOptionPane.YES_OPTION) {
+    // storeRecipe(entry.getKey());
+    // }
+    // }
+    // }
+    // }
+    //
+    // disconnect();
   }
 
   private boolean isRecipeAltered(Recipe recipe) {
@@ -373,7 +423,7 @@ public class DataBaseControl {
       boolean contains = false;
       for (ArrayList<Object> row : resultSelectDayPlan) {
         String storePlace = (String) row.get(1);
-        if(storePlace == null) storePlace = "";
+        if (storePlace == null) storePlace = "";
         if (ingred.getStorePlace().toLowerCase().equals(storePlace.toLowerCase())) {
           contains = true;
           break;
@@ -392,7 +442,7 @@ public class DataBaseControl {
     else {
       executeUpdate("INSERT INTO Ingredients(Name, Available, Amount, Recipe, OrderInRecipe, StorePlace) VALUES('" + ingred.getName() + "', " + available + ", '" + ingred.getAmount() + "', " + ingred.getRecipe().getID() + ", " + ingred.getOrder() + ", '" + ingred.getStorePlace() + "')");
       ingred.setID(readIngredientID(ingred));
-      
+
       // System.out.println(ingred.getName() +
       // " is a new Ingredient an has the ID: " + ingred.getID());
       executeUpdate("INSERT INTO Recipes_Ingredients(Recipe, Ingredient) VALUES(" + ingred.getRecipe().getID() + ", " + ingred.getID() + ")");
@@ -411,39 +461,47 @@ public class DataBaseControl {
       String ingredName = (String) row.get(0);
       String storePlace = (String) row.get(1);
       boolean available = (boolean) row.get(2);
-      if(ingred.getName().equals(ingredName) && ingred.getStorePlace().equals(storePlace)){
+      if (ingred.getName().equals(ingredName) && ingred.getStorePlace().equals(storePlace)) {
         ingred.setAvailable(available);
       }
     }
   }
 
   public void storeDayPlan(PlanerPanel recipePlanerPanel, RecipeDetailsModel model) {
-    connect();
-    for (PlanerDayPanel panel : recipePlanerPanel.getDayPanelList()) {
-      ArrayList<Recipe> storedRecipes = new ArrayList<Recipe>();
-      String dateString = ToolConstants.getDateString(panel.getDayPlan().getDay(), true);
-      ResultSet selectDayPlan = executeQuery("SELECT * FROM Date_Recipes WHERE Day = '" + dateString + "';");
-      ArrayList<ArrayList<Object>> resultSelectDayPlan = extractResultData(selectDayPlan, 2);
-      for (ArrayList<Object> recipeRow : resultSelectDayPlan) {
-        int id = (Integer) recipeRow.get(1);
-        storedRecipes.add(model.getRecipeByID(id));
-      }
-
-      for (Recipe recipe : storedRecipes) {
-        if (!panel.getDayPlan().getRecipes().contains(recipe)) {
-          executeUpdate("DELETE FROM Date_Recipes WHERE Recipe = " + recipe.getID() + " AND Day = '" + dateString + "';");
-          recipe.setFrequency(calculateFrequency(recipe.getID()));
-        }
-      }
-
-      for (Recipe recipe : panel.getDayPlan().getRecipes()) {
-        if (!storedRecipes.contains(recipe)) {
-          executeUpdate("INSERT INTO Date_Recipes(Day, Recipe) VALUES('" + dateString + "', " + recipe.getID() + ")");
-          recipe.setFrequency(calculateFrequency(recipe.getID()));
-        }
-      }
-    }
-    disconnect();
+    // connect();
+    // for (PlanerDayPanel panel : recipePlanerPanel.getDayPanelList()) {
+    // ArrayList<Recipe> storedRecipes = new ArrayList<Recipe>();
+    // String dateString =
+    // ToolConstants.getDateString(panel.getDayPlan().getDay(), true);
+    // ResultSet selectDayPlan =
+    // executeQuery("SELECT * FROM Date_Recipes WHERE Day = '" + dateString +
+    // "';");
+    // ArrayList<ArrayList<Object>> resultSelectDayPlan =
+    // extractResultData(selectDayPlan, 2);
+    // for (ArrayList<Object> recipeRow : resultSelectDayPlan) {
+    // int id = (Integer) recipeRow.get(1);
+    // storedRecipes.add(model.getRecipeByID(id));
+    // }
+    //
+    // for (Recipe recipe : storedRecipes) {
+    // if (!panel.getDayPlan().getRecipes().contains(recipe)) {
+    // executeUpdate("DELETE FROM Date_Recipes WHERE Recipe = " + recipe.getID()
+    // +
+    // " AND Day = '" + dateString + "';");
+    // recipe.setFrequency(calculateFrequency(recipe.getID()));
+    // }
+    // }
+    //
+    // for (Recipe recipe : panel.getDayPlan().getRecipes()) {
+    // if (!storedRecipes.contains(recipe)) {
+    // executeUpdate("INSERT INTO Date_Recipes(Day, Recipe) VALUES('" +
+    // dateString
+    // + "', " + recipe.getID() + ")");
+    // recipe.setFrequency(calculateFrequency(recipe.getID()));
+    // }
+    // }
+    // }
+    // disconnect();
   }
 
   public void removeDeleteRecipe(ArrayList<Recipe> recipes) {
@@ -503,20 +561,21 @@ public class DataBaseControl {
     return (Integer) resultSelect.get(0).get(0);
   }
 
-  private boolean existsConnection() {
-    boolean result = false;
-    try {
-      if (_connection != null) {
-        if (!_connection.isClosed()) {
-          result = true;
-        }
-      }
-    }
-    catch (SQLException e) {
-      JOptionPane.showMessageDialog(null, e.toString(), languageBundle.getString("NoDBConnectTitle"), JOptionPane.ERROR_MESSAGE);
-    }
-    return result;
-  }
+  // private boolean existsConnection() {
+  // boolean result = false;
+  // try {
+  // if (_connection != null) {
+  // if (!_connection.isClosed()) {
+  // result = true;
+  // }
+  // }
+  // }
+  // catch (SQLException e) {
+  // JOptionPane.showMessageDialog(null, e.toString(),
+  // languageBundle.getString("NoDBConnectTitle"), JOptionPane.ERROR_MESSAGE);
+  // }
+  // return result;
+  // }
 
   public String generateChangeMessage(Recipe recipe) {
     String result = "";

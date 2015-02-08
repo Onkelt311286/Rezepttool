@@ -2,28 +2,37 @@ package somepackage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import javax.faces.bean.ManagedBean;
+
+import mainwindow.data.Recipe;
+import util.DataBaseControl;
+import util.XMLConfigurationLoader;
 
 @ManagedBean
 public class AutoCompleteView {
 
-  private String txt6;
+  private String filterString;
+
+  public AutoCompleteView() {
+  }
 
   public List<String> completeText(String query) {
+    List<Recipe> recipes = ServeletBackbone.DataBaseControl.loadRecipeData(query.toUpperCase());
     List<String> results = new ArrayList<String>();
-    for (int i = 0; i < 10; i++) {
-      results.add(query + i);
+    for (Recipe recipe : recipes) {
+      results.add(recipe.getName());
     }
-
     return results;
   }
 
-  public String getTxt6() {
-    System.out.println(InitServelet.testString);
-    return txt6;
+  public String getFilterString() {
+    return filterString;
   }
 
-  public void setTxt6(String txt6) {
-    this.txt6 = txt6;
+  public void setFilterString(String filterString) {
+    this.filterString = filterString;
   }
 }

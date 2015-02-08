@@ -39,13 +39,15 @@ public class XMLConfigurationLoader {
   private DataMailConfiguration mailConfig;
 
   public XMLConfigurationLoader() {
-    String configFilename = "config/HTMLParseCK.properties.xml";
+    String workingDir = System.getProperty("user.dir");
+    String configFilename = workingDir + "/Rezepttool - Config/Rezepttool.properties.xml";
     _config = new XMLConfiguration();
     _config.setDelimiterParsingDisabled(true);
     File configFile = new File(configFilename);
     Writer writer = null;
     try {
       if (!configFile.isFile()) {
+        System.out.println("!!! no File !!!");
         writer = createConfigFile(configFile);
       }
       
@@ -158,7 +160,7 @@ public class XMLConfigurationLoader {
 
   private Writer createConfigFile(File configFile) throws IOException, UnsupportedEncodingException, FileNotFoundException {
     Writer writer;
-    File configDirectory = new File("config");
+    File configDirectory = new File("D:/Dropbox/T/Rezepttool - Config");
     configDirectory.mkdirs();
     configFile.createNewFile();
     writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(configFile.getAbsolutePath()), "utf-8"));
