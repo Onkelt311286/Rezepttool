@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"  
+    xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Rezeptliste</title>
+	<link href="./css/styles.css" rel="stylesheet" type="text/css" />
+</h:head>
+<h:body>
+	<p:toolbar>
+		<f:facet name="left">
+			<h:form>
+				<p:commandButton id="options" title="Optionen" type="button" icon="settings"/>
+			    <p:menu toggleable="true" overlay="true" trigger="options" my="left top" at="left bottom">
+			        <p:menuitem value="Seite Drucken" />
+					<p:menuitem value="PDF exportieren" />
+					<p:menuitem value="Email versenden" />
+			        <p:submenu label="Einstellungen">
+			            <p:menuitem style="margin-left:10px" value="Datenbank ändern" />
+						<p:menuitem style="margin-left:10px" value="Mail ändern" />
+						<p:menuitem style="margin-left:10px" value="Sprache ändern" />
+			        </p:submenu>
+			    </p:menu>
+			    
+				<p:autoComplete id="filter" dropdown="true" scrollHeight="250"
+							placeholder="Sucheingabe..." emptyMessage="Keine Treffer"
+							value="#{autoCompleteView.txt6}" completeMethod="#{autoCompleteView.completeText}" />
+			</h:form>
+		</f:facet>
+	</p:toolbar>
+	<div id="content">
+		Rezepte
+	</div>
+	<h:form>
+		<p:tabMenu id="menubar" activeIndex="1" orientation="bottom">
+			<p:menuitem title="Wochenplaner" outcome="week" icon="pot" />
+			<p:menuitem title="Rezeptliste" outcome="recipe" icon="recipe" />
+			<p:menuitem title="Kühlschrankfilter" outcome="fridge" icon="fridge" />
+			<p:menuitem title="Einkaufsliste" outcome="shop" icon="shop" />
+		</p:tabMenu>
+	</h:form>
+</h:body>
+</html>

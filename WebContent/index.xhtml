@@ -9,36 +9,7 @@
 	<link href="./css/styles.css" rel="stylesheet" type="text/css" />
 </h:head>
 <h:body>
-	<p:toolbar>
-		<f:facet name="left">
-			<h:form>
-				<p:commandButton id="options" title="Optionen" type="button" icon="settings"/>
-			    <p:menu toggleable="true" overlay="true" trigger="options" my="left top" at="left bottom">
-			        <p:menuitem value="Drucken" />
-					<p:menuitem value="PDF exportieren" />
-			        <p:submenu label="Einstellungen">
-			            <p:menuitem value="Datenbank ändern" />
-						<p:menuitem value="Mail ändern" />
-						<p:menuitem value="Sprache ändern" />
-			        </p:submenu>
-			    </p:menu>
-			    
-				<p:autoComplete id="filter" dropdown="true" scrollHeight="250"
-							placeholder="Sucheingabe..." emptyMessage="Keine Treffer"
-							value="#{autoCompleteView.txt6}" completeMethod="#{autoCompleteView.completeText}" />
-			</h:form>
-		</f:facet>
-	</p:toolbar>
-		
-	<p:calendar value="#{dateBean.date}" mode="inline" />
-	
-	<h:form>
-		<p:tabMenu id="menubar" activeIndex="0" orientation="bottom">
-			<p:menuitem title="Wochenplaner" outcome="index" icon="pot" />
-			<p:menuitem title="Rezeptliste" outcome="page-b" icon="recipe" />
-			<p:menuitem title="Kühlschrankfilter" outcome="page-b" icon="fridge" />
-			<p:menuitem title="Einkaufsliste" outcome="page-b" icon="shop" />
-		</p:tabMenu>
-	</h:form>
+	<img src="images/icons/icon_tool.png" width="10%" alt="Programmicon" />
+	<p:link value="Weiter zum Rezepttool" outcome="week" />
 </h:body>
 </html>
