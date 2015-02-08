@@ -1,5 +1,6 @@
 body {
   background-color: #e9e9e9; 
+  margin: 0;
 }
 a:hover { 
   color: red
@@ -68,6 +69,32 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 
 /* New Styles */
 
+/* Toolbar */
+.ui-toolbar{
+	background-image: url('../images/interface/toolbar.jpg') !important;
+	background-size: 100% !important; 
+}
+.ui-toolbar-group-left{
+	width: 100%;
+}
+.ui-toolbar .ui-button{
+	width: 10%;
+	margin-right: 1% !important;
+}
+.ui-autocomplete{
+	width: 89%;
+}
+.ui-autocomplete .ui-inputfield{
+	width: 88%;
+	border-radius: 3px;
+}
+.ui-autocomplete-dropdown{
+	margin-left: 1%;
+	border-radius: 3px;
+	top: -5% !important;
+	height: 110% !important;
+}
+
 /* Tabmenu */
 .ui-tabmenu {
 	width: 100%;
@@ -96,10 +123,12 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 }
 
 /* Icons */
+.ui-icon{
+	border-radius: 0 !important;
+}
 .ui-tabmenu .ui-icon{
 	width: 100% !important;
 	height: 30px !important;
-	border-radius: 0 !important;
 	background-position: 50%;
 }
 .pot{
@@ -117,4 +146,8 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 .shop{
 	background-image: url("../images/icons/shop.png") !important;
 	background-size: 40px;
+}
+.settings{
+	background-image: url("../images/icons/settings.png") !important;
+	background-size: 16px;
 }

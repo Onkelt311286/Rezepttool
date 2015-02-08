@@ -1,31 +1,35 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"  
+    xmlns:f="http://java.sun.com/jsf/core" 
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<title>Rezepttool</title>
 	<link href="./css/styles.css" rel="stylesheet" type="text/css" />
 </h:head>
 <h:body>
-	<h:panelGrid id="toolbar" columns="2" layout="grid">
-		
-		<h:form>
-			<p:splitButton value="Optionen">
-				<p:menuitem value="Drucken" />
-				<p:menuitem value="Speichern" />
-				<p:menuitem value="Datenbank" />
-				<p:menuitem value="Mail" />
-				<p:menuitem value="Sprache" />
-			</p:splitButton>
-			<p:autoComplete id="filter" dropdown="true" scrollHeight="250"
+	<p:toolbar>
+		<f:facet name="left">
+			<h:form>
+				<p:commandButton id="options" title="Optionen" type="button" icon="settings"/>
+			    <p:menu toggleable="true" overlay="true" trigger="options" my="left top" at="left bottom">
+			        <p:menuitem value="Drucken" />
+					<p:menuitem value="PDF exportieren" />
+			        <p:submenu label="Einstellungen">
+			            <p:menuitem value="Datenbank ändern" />
+						<p:menuitem value="Mail ändern" />
+						<p:menuitem value="Sprache ändern" />
+			        </p:submenu>
+			    </p:menu>
+			    
+				<p:autoComplete id="filter" dropdown="true" scrollHeight="250"
 							placeholder="Sucheingabe..." emptyMessage="Keine Treffer"
 							value="#{autoCompleteView.txt6}" completeMethod="#{autoCompleteView.completeText}" />
-		</h:form>
+			</h:form>
+		</f:facet>
+	</p:toolbar>
 		
-	</h:panelGrid>
-	
 	<p:calendar value="#{dateBean.date}" mode="inline" />
 	
 	<h:form>
