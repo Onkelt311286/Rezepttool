@@ -9,28 +9,32 @@
 	<link href="./css/styles.css" rel="stylesheet" type="text/css" />
 </h:head>
 <h:body>
-	<h:form>
-		<h:panelGrid columns="2" cellpadding="5">
+	<h:panelGrid id="toolbar" columns="2" layout="grid">
+		
+		<h:form>
+			<p:splitButton value="Optionen">
+				<p:menuitem value="Drucken" />
+				<p:menuitem value="Speichern" />
+				<p:menuitem value="Datenbank" />
+				<p:menuitem value="Mail" />
+				<p:menuitem value="Sprache" />
+			</p:splitButton>
 			<p:autoComplete id="filter" dropdown="true" scrollHeight="250"
-				placeholder="Sucheingabe..." emptyMessage="Keine Treffer"
-				value="#{autoCompleteView.txt6}"
-				completeMethod="#{autoCompleteView.completeText}" />
-		</h:panelGrid>
-	</h:form>
+							placeholder="Sucheingabe..." emptyMessage="Keine Treffer"
+							value="#{autoCompleteView.txt6}" completeMethod="#{autoCompleteView.completeText}" />
+		</h:form>
+		
+	</h:panelGrid>
+	
 	<p:calendar value="#{dateBean.date}" mode="inline" />
-	<p:tabView id="menubar" orientation="bottom">
-		<p:tab title="1">
-			<h:outputText value="Wochenplaner" />
-		</p:tab>
-		<p:tab title="2">
-			<h:outputText value="Rezeptliste" />
-		</p:tab>
-		<p:tab title="3">
-			<h:outputText value="Kühlschrankfilter" />
-		</p:tab>
-		<p:tab title="4">
-			<h:outputText value="Einkaufsliste" />
-		</p:tab>
-	</p:tabView>
+	
+	<h:form>
+		<p:tabMenu id="menubar" activeIndex="0" orientation="bottom">
+			<p:menuitem title="Wochenplaner" outcome="index" icon="pot" />
+			<p:menuitem title="Rezeptliste" outcome="page-b" icon="recipe" />
+			<p:menuitem title="Kühlschrankfilter" outcome="page-b" icon="fridge" />
+			<p:menuitem title="Einkaufsliste" outcome="page-b" icon="shop" />
+		</p:tabMenu>
+	</h:form>
 </h:body>
 </html>

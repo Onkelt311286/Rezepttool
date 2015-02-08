@@ -66,12 +66,51 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
   list-style-position: inside;
 }
 
-/* New */
-.ui-tabs {
+/* New Styles */
+
+/* Tabmenu */
+.ui-tabmenu {
 	width: 100%;
-	position:absolute;
-	bottom:0;
+	position: absolute;
+	bottom: 0;
+	left: 0;
 }
-.ui-autocomplete-input{
-	width:300px;
+.ui-tabmenu-nav{
+	padding: 0 !important;
+}
+.ui-tabmenuitem{
+	width: 25%;
+	margin: 0px !important;
+	border: none !important;
+	background-image: url('../images/interface/button.jpg') !important;
+	background-size: 100% !important;
+}
+.ui-tabmenuitem.ui-state-default{
+	opacity: 0.8;
+}
+.ui-tabmenuitem.ui-state-active{
+	opacity: 1;
+}
+
+/* Icons */
+.ui-tabmenu .ui-icon{
+	width: 50px !important;
+	height: 30px !important;
+	border-radius: 0 !important;
+}
+.pot{
+	background-image: url('../images/icons/pot.png') !important;
+	background-size: 50px;
+}
+.recipe{
+	background-image: url("../images/icons/recipe.png") !important;
+	background-size: 26px;
+}
+.fridge{
+	background-image: url("../images/icons/fridge.png") !important;
+	background-size: 16px;
+}
+.shop{
+	background-image: url("../images/icons/shop.png") !important;
+	background-size: 40px;
 }
