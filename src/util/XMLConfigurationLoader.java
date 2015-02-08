@@ -39,7 +39,8 @@ public class XMLConfigurationLoader {
   private DataMailConfiguration mailConfig;
 
   public XMLConfigurationLoader() {
-    String configFilename = "D:/Dropbox/T/Rezepttool - Config/Rezepttool.properties.xml";
+    String workingDir = System.getProperty("user.dir");
+    String configFilename = workingDir + "/Rezepttool - Config/Rezepttool.properties.xml";
     _config = new XMLConfiguration();
     _config.setDelimiterParsingDisabled(true);
     File configFile = new File(configFilename);
