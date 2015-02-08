@@ -1,19 +1,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
-      xmlns:p="http://primefaces.org/ui">
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<title>Rezepttool</title>
-	<link href="./css/styles.css" rel="stylesheet" type="text/css"/> 
+	<link href="./css/styles.css" rel="stylesheet" type="text/css" />
 </h:head>
 <h:body>
-	<div id="topbar">
-    	<p:autoComplete id="filter" dropdown="true" scrollHeight="250" placeholder="Sucheingabe..." emptyMessage="Keine Treffer" 
-    				value="#{autoCompleteView.text}" completeMethod="#{autoCompleteView.completeText}" 
-    				groupBy="#{autoCompleteView.getGroup(category)}" queryDelay="1000" />
-	</div>
+	<h:form>
+		<h:panelGrid columns="2" cellpadding="5">
+			<p:autoComplete id="filter" dropdown="true" scrollHeight="250"
+				placeholder="Sucheingabe..." emptyMessage="Keine Treffer"
+				value="#{autoCompleteView.txt6}"
+				completeMethod="#{autoCompleteView.completeText}" />
+		</h:panelGrid>
+	</h:form>
 	<p:calendar value="#{dateBean.date}" mode="inline" />
 	<p:tabView id="menubar" orientation="bottom">
 		<p:tab title="1">
@@ -29,4 +32,5 @@
 			<h:outputText value="Einkaufsliste" />
 		</p:tab>
 	</p:tabView>
-</h:body></html>
+</h:body>
+</html>
