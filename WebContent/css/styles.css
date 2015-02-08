@@ -85,6 +85,9 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-image: url('../images/interface/button.jpg') !important;
 	background-size: 100% !important;
 }
+.ui-tabmenuitem a{
+	width: 90%;
+}
 .ui-tabmenuitem.ui-state-default{
 	opacity: 0.8;
 }
@@ -94,9 +97,10 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 
 /* Icons */
 .ui-tabmenu .ui-icon{
-	width: 50px !important;
+	width: 100% !important;
 	height: 30px !important;
 	border-radius: 0 !important;
+	background-position: 50%;
 }
 .pot{
 	background-image: url('../images/icons/pot.png') !important;
