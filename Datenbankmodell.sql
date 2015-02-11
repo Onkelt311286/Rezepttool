@@ -1,226 +1,227 @@
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
-
-
--- -----------------------------------------------------
--- Table `Recipes`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `Recipes` ;
-
-CREATE  TABLE IF NOT EXISTS `Recipes` (
-  `RecipeID` INT NOT NULL AUTO_INCREMENT ,
-  `Name` VARCHAR(45) NULL ,
-  `Formula` VARCHAR(45) NULL ,
-  `Duration` VARCHAR(45) NULL ,
-  PRIMARY KEY (`RecipeID`) )
-ENGINE = InnoDB;
-
+--ALTER TABLE Recipes_Ingredients RENAME TO Recipes_Ingredients_alt
+--ALTER TABLE Date_Recipes RENAME TO Date_Recipes_alt
+--ALTER TABLE Recipes RENAME TO Recipes_alt
+--ALTER TABLE ingredients RENAME TO ingredients_alt
 
 -- -----------------------------------------------------
--- Table `StorePlace`
+-- Table Recipes
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `StorePlace` ;
-
-CREATE  TABLE IF NOT EXISTS `StorePlace` (
-  `StorePlaceID` INT NOT NULL AUTO_INCREMENT ,
-  `Name` VARCHAR(45) NULL ,
-  PRIMARY KEY (`StorePlaceID`) )
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `Ingredients`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `Ingredients` ;
-
-CREATE  TABLE IF NOT EXISTS `Ingredients` (
-  `IngredientID` INT NOT NULL AUTO_INCREMENT ,
-  `Name` VARCHAR(45) NULL ,
-  `StorePlace` INT NULL ,
-  PRIMARY KEY (`IngredientID`) ,
-  INDEX `fk_Ingredients_StorePlace1_idx` (`StorePlace` ASC) ,
-  CONSTRAINT `fk_Ingredients_StorePlace1`
-    FOREIGN KEY (`StorePlace` )
-    REFERENCES `StorePlace` (`StorePlaceID` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
+--DROP TABLE IF EXISTS Recipes ;
+--
+--CREATE TABLE IF NOT EXISTS Recipes (
+--  RecipeID INT PRIMARY KEY AUTO_INCREMENT(1,1) NOT NULL ,
+--  Name VARCHAR(255) ,
+--  Formula VARCHAR(MAX) ,
+--  Duration VARCHAR(255)
+--  );
+--
+--insert into recipes(name, formula, duration)
+--select name, formula, duration
+--from recipes_alt
 
 -- -----------------------------------------------------
--- Table `RecipeIngredients`
+-- Table StorePlace
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `RecipeIngredients` ;
-
-CREATE  TABLE IF NOT EXISTS `RecipeIngredients` (
-  `Ingredient` INT NOT NULL ,
-  `Recipe` INT NOT NULL ,
-  `Amount` VARCHAR(45) NULL ,
-  `Order` VARCHAR(45) NULL ,
-  INDEX `fk_RecipeIngredients_Ingredients_idx` (`Ingredient` ASC) ,
-  INDEX `fk_RecipeIngredients_Recipes1_idx` (`Recipe` ASC) ,
-  CONSTRAINT `fk_RecipeIngredients_Ingredients`
-    FOREIGN KEY (`Ingredient` )
-    REFERENCES `Ingredients` (`IngredientID` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_RecipeIngredients_Recipes1`
-    FOREIGN KEY (`Recipe` )
-    REFERENCES `Recipes` (`RecipeID` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
+--DROP TABLE IF EXISTS StorePlace;
+--
+--CREATE TABLE IF NOT EXISTS StorePlace (
+--        StorePlaceID INT PRIMARY KEY AUTO_INCREMENT(1,1) NOT NULL, 
+--        Name VARCHAR(255)
+--        );
+--
+--insert into StorePlace(name)
+--select distinct storeplace
+--from ingredients_alt
 
 -- -----------------------------------------------------
--- Table `Type`
+-- Table Ingredients
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Type` ;
-
-CREATE  TABLE IF NOT EXISTS `Type` (
-  `TypeID` INT NOT NULL AUTO_INCREMENT ,
-  `Name` VARCHAR(45) NULL ,
-  PRIMARY KEY (`TypeID`) )
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `RecipeTypes`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `RecipeTypes` ;
-
-CREATE  TABLE IF NOT EXISTS `RecipeTypes` (
-  `Recipe` INT NULL ,
-  `Type` INT NULL ,
-  INDEX `fk_RecipeTypes_Recipes1_idx` (`Recipe` ASC) ,
-  INDEX `fk_RecipeTypes_Type1_idx` (`Type` ASC) ,
-  CONSTRAINT `fk_RecipeTypes_Recipes1`
-    FOREIGN KEY (`Recipe` )
-    REFERENCES `Recipes` (`RecipeID` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_RecipeTypes_Type1`
-    FOREIGN KEY (`Type` )
-    REFERENCES `Type` (`TypeID` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
+--DROP TABLE IF EXISTS Ingredients ;
+--
+--CREATE TABLE IF NOT EXISTS Ingredients (
+--  IngredientID INT PRIMARY KEY AUTO_INCREMENT(1,1) NOT NULL ,
+--  Name VARCHAR(255) ,
+--  StorePlace INT REFERENCES StorePlace(StorePlaceID)
+--  );
+--
+--ALTER TABLE Ingredients ADD CONSTRAINT name_StorePlace_Unique UNIQUE(Name, StorePlace)
+--
+--insert into Ingredients(name, storeplace)
+--select distinct a.name, b.storeplaceid
+--from ingredients_alt a, storeplace b
+--where a.storeplace = b.name
 
 -- -----------------------------------------------------
--- Table `DayPlan`
+-- Table RecipeIngredients
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `DayPlan` ;
-
-CREATE  TABLE IF NOT EXISTS `DayPlan` (
-  `Recipe` INT NULL ,
-  `Date` DATETIME NULL ,
-  INDEX `fk_DayPlan_Recipes1_idx` (`Recipe` ASC) ,
-  CONSTRAINT `fk_DayPlan_Recipes1`
-    FOREIGN KEY (`Recipe` )
-    REFERENCES `Recipes` (`RecipeID` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `User`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `User` ;
-
-CREATE  TABLE IF NOT EXISTS `User` (
-  `UserID` INT NOT NULL AUTO_INCREMENT ,
-  `Name` VARCHAR(45) NULL ,
-  `EMail` VARCHAR(45) NULL ,
-  PRIMARY KEY (`UserID`) )
-ENGINE = InnoDB;
-
+--DROP TABLE IF EXISTS RecipeIngredients ;
+--
+--CREATE  TABLE IF NOT EXISTS RecipeIngredients (
+--  Ingredient INT REFERENCES Ingredients(IngredientID) ,
+--  Recipe INT REFERENCES Recipes(RecipeID) ,
+--  Amount VARCHAR(255) ,
+--  OrderInRecipe INT
+--  );
+--
+--select a.name, b.name, d.amount, d.orderinrecipe
+--from recipes a, ingredients b, recipeingredients d
+--where d.ingredient = b.ingredientid
+--and d.recipe = a.recipeid
+--
+--insert into RecipeIngredients(Ingredient, Recipe, Amount, OrderInRecipe)
+--select b.IngredientID, c.RecipeID, a.amount, a.orderinrecipe
+--from ingredients_alt a
+--inner join Ingredients b
+--on b.name = a.name
+--inner join recipes_alt d
+--on a.recipe = d.recipe_id
+--inner join Recipes c
+--on c.name = d.name
 
 -- -----------------------------------------------------
--- Table `Group`
+-- Table Type
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Group` ;
-
-CREATE  TABLE IF NOT EXISTS `Group` (
-  `GroupID` INT NOT NULL AUTO_INCREMENT ,
-  `Name` VARCHAR(45) NULL ,
-  PRIMARY KEY (`GroupID`) )
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `UserGroups`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `UserGroups` ;
-
-CREATE  TABLE IF NOT EXISTS `UserGroups` (
-  `Users` INT NULL ,
-  `Group` INT NULL ,
-  INDEX `fk_UserGroups_User1_idx` (`Users` ASC) ,
-  INDEX `fk_UserGroups_Group1_idx` (`Group` ASC) ,
-  CONSTRAINT `fk_UserGroups_User1`
-    FOREIGN KEY (`Users` )
-    REFERENCES `User` (`UserID` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_UserGroups_Group1`
-    FOREIGN KEY (`Group` )
-    REFERENCES `Group` (`GroupID` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
+--DROP TABLE IF EXISTS Type ;
+--
+--CREATE  TABLE IF NOT EXISTS Type (
+--  TypeID INT PRIMARY KEY AUTO_INCREMENT(1,1) NOT NULL ,
+--  Name VARCHAR(255)
+--  );
+--insert into Type (Name) values ('')
 
 -- -----------------------------------------------------
--- Table `GroupRecipes`
+-- Table RecipeTypes
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `GroupRecipes` ;
-
-CREATE  TABLE IF NOT EXISTS `GroupRecipes` (
-  `Recipe` INT NULL ,
-  `Group` INT NULL ,
-  INDEX `fk_GroupRecipes_Recipes1_idx` (`Recipe` ASC) ,
-  INDEX `fk_GroupRecipes_Group1_idx` (`Group` ASC) ,
-  CONSTRAINT `fk_GroupRecipes_Recipes1`
-    FOREIGN KEY (`Recipe` )
-    REFERENCES `Recipes` (`RecipeID` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_GroupRecipes_Group1`
-    FOREIGN KEY (`Group` )
-    REFERENCES `Group` (`GroupID` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
+--DROP TABLE IF EXISTS RecipeTypes ;
+--
+--CREATE  TABLE IF NOT EXISTS RecipeTypes (
+--  Recipe INT REFERENCES Recipes(RecipeID) ,
+--  Type INT REFERENCES Type(TypeID)
+--  );
+--
+--insert into RecipeTypes (Recipe, Type)
+--select a.recipeid, b.typeid
+--from recipes a, type b
 
 -- -----------------------------------------------------
--- Table `GroupIngredients`
+-- Table DayPlan
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `GroupIngredients` ;
+--DROP TABLE IF EXISTS DayPlan ;
+--
+--CREATE  TABLE IF NOT EXISTS DayPlan (
+--  Recipe INT REFERENCES Recipes(RecipeID) ,
+--  Day VARCHAR(10) NOT NULL
+--  );
+--
+--select a.name, b.day
+--from recipes a, DayPlan b
+--where a.recipeid = b.recipe
+--
+--insert into DayPlan (Recipe, Day)
+--select c.recipeid, a.day
+--from date_recipes_alt a
+--inner join recipes_alt b
+--on a.recipe = b.recipe_id
+--inner join Recipes c
+--on c.name = b.name
 
-CREATE  TABLE IF NOT EXISTS `GroupIngredients` (
-  `Group` INT NULL ,
-  `Ingredient` INT NULL ,
-  `Available` BIT NULL ,
-  INDEX `fk_GroupIngredients_Group1_idx` (`Group` ASC) ,
-  INDEX `fk_GroupIngredients_Ingredients1_idx` (`Ingredient` ASC) ,
-  CONSTRAINT `fk_GroupIngredients_Group1`
-    FOREIGN KEY (`Group` )
-    REFERENCES `Group` (`GroupID` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_GroupIngredients_Ingredients1`
-    FOREIGN KEY (`Ingredient` )
-    REFERENCES `Ingredients` (`IngredientID` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+-- -----------------------------------------------------
+-- Table EMail
+-- -----------------------------------------------------
+--DROP TABLE IF EXISTS EMail ;
+--
+--CREATE  TABLE IF NOT EXISTS EMail (
+--  EMailID INT PRIMARY KEY AUTO_INCREMENT(1,1) NOT NULL ,
+--  MailTo VARCHAR(255) ,
+--  MailFrom VARCHAR(255) ,
+--  Host VARCHAR(255) ,
+--  Port INT ,
+--  Username VARCHAR(255) ,
+--  Password VARCHAR(255)
+--  );
+--
+--insert into EMail(MailTo, MailFrom, Host, Port, Username, Password) Values('t-koehler@online.de', 't-koehler@online.de', 'smtp.1und1.de', 25, 't-koehler@online.de', 'fOoMbnC8Ld4/jNDbg75T+w==')
+--insert into EMail(MailTo, MailFrom, Host, Port, Username, Password) Values('annikabokelmann@online.de', 'annikabokelmann@online.de', 'smtp.1und1.de', 25, 'annikabokelmann@online.de', 'jz9Xk9tzappiXWPoGASX+Q==')
+--insert into EMail(MailTo, MailFrom, Host, Port, Username, Password) Values('molwara@icloud.de', 'molwara@icloud.de', 'smtp.mail.me.com', 587, 'molwara@icloud.de', '')
 
+-- -----------------------------------------------------
+-- Table User
+-- -----------------------------------------------------
+--DROP TABLE IF EXISTS User ;
+--
+--CREATE  TABLE IF NOT EXISTS Users (
+--  UserID INT PRIMARY KEY AUTO_INCREMENT(1,1) NOT NULL ,
+--  Name VARCHAR(255) ,
+--  Password VARCHAR(255) ,
+--  EMail INT REFERENCES EMail(EMailID)
+--  );
+--
+--insert into users (name, password, email) values('Arges', '', 1);
+--insert into users (name, password, email) values('Molwara', '', 2);
 
+-- -----------------------------------------------------
+-- Table Group
+-- -----------------------------------------------------
+--DROP TABLE IF EXISTS Groups ;
+--
+--CREATE TABLE IF NOT EXISTS Groups (
+--  GroupID INT PRIMARY KEY AUTO_INCREMENT(1,1) NOT NULL ,
+--  Name VARCHAR(255),
+--  EMail INT REFERENCES EMail(EMailID)
+--  );
+--
+--insert into Groups (Name, EMail) values ('TAnnias', 3);
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+-- -----------------------------------------------------
+-- Table UserGroups
+-- -----------------------------------------------------
+--DROP TABLE IF EXISTS UserGroups ;
+--
+--CREATE  TABLE IF NOT EXISTS UserGroups (
+--  Users INT REFERENCES User(UserID),
+--  Groups INT REFERENCES Groups(GroupID)
+--  );
+--
+--select b.name, c.name, d.mailfrom, c.email
+--from UserGroups a
+--inner join users b
+--on a.users = b.userid
+--inner join groups c
+--on a.groups = c.groupid
+--inner join email d
+--on b.email = d.emailid
+--inner join email e
+--on c.email = e.emailid
+--
+--insert into UserGroups (Users, Groups) values (1, 1);
+--insert into UserGroups (Users, Groups) values (2, 1);
+
+-- -----------------------------------------------------
+-- Table GroupRecipes
+-- -----------------------------------------------------
+--DROP TABLE IF EXISTS GroupRecipes ;
+--
+--CREATE  TABLE IF NOT EXISTS GroupRecipes (
+--  Recipe INT REFERENCES Recipes(RecipeID) ,
+--  Groups INT REFERENCES Groups(GroupID)
+--  );
+--
+--insert into GroupRecipes (Recipe, Groups)
+--select a.recipeID, b.groupID
+--from recipes a, groups b
+
+-- -----------------------------------------------------
+-- Table GroupIngredients
+-- -----------------------------------------------------
+--DROP TABLE IF EXISTS GroupIngredients ;
+--
+--CREATE TABLE IF NOT EXISTS GroupIngredients (
+--  Groups INT REFERENCES Groups(GroupID) ,
+--  Ingredient INT REFERENCES Ingredients(IngredientID) ,
+--  Available BIT
+--  );
+--
+--insert into GroupIngredients (Groups, Ingredient, Available)
+--select distinct a.groupid, b.ingredientid, c.available
+--from groups a, ingredients b, ingredients_alt c
+--where b.name = c.name

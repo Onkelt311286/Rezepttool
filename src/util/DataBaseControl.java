@@ -27,6 +27,7 @@ import javax.swing.JTextField;
 import recipedetails.recipe.RecipeDetailsModel;
 import recipefinder.ingredient.IngredientFinderModel;
 import recipefinder.recipe.RecipeFinderModel;
+import somepackage.Group;
 import mainwindow.data.DayPlan;
 import mainwindow.data.Ingredient;
 import mainwindow.data.Recipe;
@@ -154,7 +155,7 @@ public class DataBaseControl {
   // }
   // }
 
-  public List<Recipe> loadRecipeData(String query) {
+  public List<Recipe> loadFilteredRecipesByName(String query) {
     List<Recipe> recipes = new ArrayList<Recipe>();
     try {
       Class.forName("org.h2.Driver");
@@ -163,7 +164,7 @@ public class DataBaseControl {
 
       query = query.replace("'", "''");
 
-      ResultSet selectRecipes = executeQuery("SELECT Recipe_ID FROM Recipes WHERE UPPER(Name) like '%" + query + "%';");
+      ResultSet selectRecipes = executeQuery("SELECT RecipeID FROM Recipes WHERE UPPER(Name) like '%" + query + "%';");
       ArrayList<ArrayList<Object>> resultSelectRecipes = extractResultData(selectRecipes, 1);
       for (ArrayList<Object> recipeRow : resultSelectRecipes) {
         int id = (Integer) recipeRow.get(0);
@@ -235,27 +236,42 @@ public class DataBaseControl {
     // languageBundle.getString("NoDBConnectTitle"), JOptionPane.ERROR_MESSAGE);
     // }
   }
+  
+  public Group loadGroup(int id){
+    Group group = null;
+    // TODO: über GroupIngredients Available auslesen. <-- wird Teil des
+    // Gruppenobjektes
+    return group;
+  }
 
   public Recipe loadRecipe(int id) {
     Recipe recipe = null;
-    ResultSet selectRecipe = executeQuery("SELECT Name, Used, Formula, Duration, Type, KindOfMeal FROM Recipes WHERE Recipe_ID = " + id + ";");
-    ArrayList<ArrayList<Object>> resultSelectRecipes = extractResultData(selectRecipe, 6);
+    ResultSet selectRecipe = executeQuery("SELECT Name, Formula, Duration FROM Recipes WHERE RecipeID = " + id + ";");
+    ArrayList<ArrayList<Object>> resultSelectRecipes = extractResultData(selectRecipe, 3);
     for (ArrayList<Object> recipeRow : resultSelectRecipes) {
       String name = (String) recipeRow.get(0);
-      boolean used = (Boolean) recipeRow.get(1);
-      String formula = (String) recipeRow.get(2);
+      String formula = (String) recipeRow.get(1);
       ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
-      String duration = (String) recipeRow.get(3);
-      String type = (String) recipeRow.get(4);
-      Integer kindOfMeal = (Integer) recipeRow.get(5);
+      ArrayList<String> types = new ArrayList<String>();
+      String duration = (String) recipeRow.get(2);
       long frequency = calculateFrequency(id);
-      recipe = new Recipe(name, ingredients, used, formula, id, duration, type, kindOfMeal, frequency);
+      recipe = new Recipe(id, name, formula, duration, ingredients, types, frequency);
 
-      ResultSet selectIngredientIDs = executeQuery("SELECT * FROM Recipes_Ingredients WHERE Recipe = " + id + ";");
+      // TODO: über recipeIngredients amount und order auslesen. <-- wird Teil
+      // des Rezeptes, wird dann am besten in zwei Maps<Ingredient, String>
+      // gespeichert
+      ResultSet selectIngredientIDs = executeQuery("SELECT * FROM RecipeIngredients WHERE Recipe = " + id + ";");
       ArrayList<ArrayList<Object>> resultSelectIngredientIDs = extractResultData(selectIngredientIDs, 2);
       for (ArrayList<Object> idRow : resultSelectIngredientIDs) {
         Ingredient ingred = loadIngredient(recipe, (int) idRow.get(1));
         ingredients.add(ingred);
+      }
+
+      ResultSet selectTypeIDs = executeQuery("SELECT * FROM RecipeTypes WHERE Recipe = " + id + ";");
+      ArrayList<ArrayList<Object>> resultSelectTypeIDs = extractResultData(selectTypeIDs, 2);
+      for (ArrayList<Object> idRow : resultSelectTypeIDs) {
+        String type = loadType(recipe, (int) idRow.get(1));
+        types.add(type);
       }
     }
     return recipe;
@@ -263,17 +279,36 @@ public class DataBaseControl {
 
   private Ingredient loadIngredient(Recipe recipe, int id) {
     Ingredient ingred = null;
-    ResultSet selectIngredients = executeQuery("SELECT * FROM Ingredients WHERE Ingredient_ID = " + id + ";");
-    ArrayList<ArrayList<Object>> resultSelectIngredients = extractResultData(selectIngredients, 7);
+
+    ResultSet selectIngredients = executeQuery("SELECT * FROM Ingredients WHERE IngredientID = " + id + ";");
+    ArrayList<ArrayList<Object>> resultSelectIngredients = extractResultData(selectIngredients, 3);
     for (ArrayList<Object> ingredientRow : resultSelectIngredients) {
-      ingred = new Ingredient((String) ingredientRow.get(1), (String) ingredientRow.get(2), recipe, (Boolean) ingredientRow.get(4), (Integer) ingredientRow.get(0), (Integer) ingredientRow.get(5), (String) ingredientRow.get(6));
+
+      String storePlace = "";
+      ResultSet selectStorePlace = executeQuery("SELECT * FROM StorePlace WHERE StorePlaceID = " + ingredientRow.get(2) + ";");
+      ArrayList<ArrayList<Object>> resultSelectStorePlace = extractResultData(selectStorePlace, 2);
+      for (ArrayList<Object> StorePlaceRow : resultSelectStorePlace) {
+        storePlace = (String) StorePlaceRow.get(1);
+      }
+
+      ingred = new Ingredient((Integer) ingredientRow.get(0), (String) ingredientRow.get(1), storePlace);
     }
     return ingred;
   }
 
+  private String loadType(Recipe recipe, int id) {
+    String type = null;
+    ResultSet selectTypes = executeQuery("SELECT * FROM Type WHERE TypeID = " + id + ";");
+    ArrayList<ArrayList<Object>> resultSelectIngredients = extractResultData(selectTypes, 2);
+    for (ArrayList<Object> ingredientRow : resultSelectIngredients) {
+      type = (String) ingredientRow.get(1);
+    }
+    return type;
+  }
+
   private long calculateFrequency(int id) {
     long result = 0;
-    ResultSet selectIngredientIDs = executeQuery("SELECT COUNT(Recipe) FROM Date_Recipes WHERE Recipe = " + id + ";");
+    ResultSet selectIngredientIDs = executeQuery("SELECT COUNT(Recipe) FROM DayPlan WHERE Recipe = " + id + ";");
     ArrayList<ArrayList<Object>> resultSelectIngredientIDs = extractResultData(selectIngredientIDs, 1);
     for (ArrayList<Object> idRow : resultSelectIngredientIDs) {
       result = (Long) idRow.get(0);
@@ -393,24 +428,33 @@ public class DataBaseControl {
   }
 
   private void storeRecipe(Recipe recipe) {
-    int use = 0;// Use isnt relevant for db anymore. it will now always be saved
-                // as false
-    if (recipe.getID() > -1) {
-      executeUpdate("UPDATE Recipes SET Name = '" + recipe.getName() + "', Used = " + use + ", Formula = '" + recipe.getFormula() + "', Duration = '" + recipe.getDuration() + "', Type = '" + recipe.getType() + "', KindOfMeal = " + ToolConstants.KINDOFMEAL.mealToInt(recipe.getKindOfMeal()) + " WHERE Recipe_ID = '" + recipe.getID() + "';");
-      for (Ingredient ingred : recipe.getIngredients()) {
-        storeIngredient(ingred);
-      }
-      removeDeletedIngredients(recipe);
-    }
-    else {
-      executeUpdate("INSERT INTO Recipes(Name, Used, Formula, Duration, Type, KindOfMeal) VALUES('" + recipe.getName() + "', " + use + ", '" + recipe.getFormula() + "', '" + recipe.getDuration() + "', '" + recipe.getType() + "', " + ToolConstants.KINDOFMEAL.mealToInt(recipe.getKindOfMeal()) + ")");
-      recipe.setID(readRecipeID(recipe));
-      // System.out.println(recipe.getName() +
-      // " is a new Recipe an has the ID: " + recipe.getID());
-      for (Ingredient ingred : recipe.getIngredients()) {
-        storeIngredient(ingred);
-      }
-    }
+    // int use = 0;// Use isnt relevant for db anymore. it will now always be
+    // saved
+    // // as false
+    // if (recipe.getID() > -1) {
+    // executeUpdate("UPDATE Recipes SET Name = '" + recipe.getName() +
+    // "', Used = " + use + ", Formula = '" + recipe.getFormula() +
+    // "', Duration = '" + recipe.getDuration() + "', Type = '" +
+    // recipe.getType() + "', KindOfMeal = " +
+    // ToolConstants.KINDOFMEAL.mealToInt(recipe.getKindOfMeal()) +
+    // " WHERE Recipe_ID = '" + recipe.getID() + "';");
+    // for (Ingredient ingred : recipe.getIngredients()) {
+    // storeIngredient(ingred);
+    // }
+    // removeDeletedIngredients(recipe);
+    // }
+    // else {
+    // executeUpdate("INSERT INTO Recipes(Name, Used, Formula, Duration, Type, KindOfMeal) VALUES('"
+    // + recipe.getName() + "', " + use + ", '" + recipe.getFormula() + "', '" +
+    // recipe.getDuration() + "', '" + recipe.getType() + "', " +
+    // ToolConstants.KINDOFMEAL.mealToInt(recipe.getKindOfMeal()) + ")");
+    // recipe.setID(readRecipeID(recipe));
+    // // System.out.println(recipe.getName() +
+    // // " is a new Recipe an has the ID: " + recipe.getID());
+    // for (Ingredient ingred : recipe.getIngredients()) {
+    // storeIngredient(ingred);
+    // }
+    // }
   }
 
   private void storeIngredient(Ingredient ingred) {

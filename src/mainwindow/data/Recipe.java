@@ -8,85 +8,101 @@ import util.ToolConstants;
 
 public class Recipe implements Serializable, Comparable<Recipe> {
 
-  private static final long        serialVersionUID = -4849235700318146994L;
-  private static final int         bitSetLength     = 10;
-  private String                   _name;
-  private ArrayList<Ingredient>    _ingredients;
-  private boolean                  _used;
-  private String                   _formula;
-  private int                      _id;
-  private String                   _duration;
-  private String                   _type;
-  private ToolConstants.KINDOFMEAL _kindOfMeal;
-  private BitSet                   _valueChangedMap;
-  private long                     frequency;
+  private static final long     serialVersionUID = -4849235700318146994L;
+  private static final int      bitSetLength     = 10;
+  private String                name;
+  private ArrayList<Ingredient> ingredients;
+  private boolean               used;
+  private String                formula;
+  private int                   id;
+  private String                duration;
+  private ArrayList<String>     types;
+  private BitSet                valueChangedMap;
+  private long                  frequency;
 
-  public Recipe(String name) {
-    _name = name;
-    if (_name.contains("Chefkoch.de Rezept: ")) {
-      _name = _name.replace("Chefkoch.de Rezept: ", "");
-    }
-    if (_name.contains("'")) {
-      _name = _name.replace("'", "");
-    }
-    _ingredients = new ArrayList<Ingredient>();
-    _used = false;
-    _formula = "";
-    _id = -1;
-    _duration = "";
-    _type = "";
-    _kindOfMeal = ToolConstants.KINDOFMEAL.Undefined;
-    _valueChangedMap = new BitSet(bitSetLength);
-  }
+//  public Recipe(String name) {
+//    _name = name;
+//    if (_name.contains("Chefkoch.de Rezept: ")) {
+//      _name = _name.replace("Chefkoch.de Rezept: ", "");
+//    }
+//    if (_name.contains("'")) {
+//      _name = _name.replace("'", "");
+//    }
+//    _ingredients = new ArrayList<Ingredient>();
+//    _used = false;
+//    _formula = "";
+//    _id = -1;
+//    _duration = "";
+//    types = new ArrayList<String>();
+//    _valueChangedMap = new BitSet(bitSetLength);
+//  }
 
-  public Recipe(String name, ArrayList<Ingredient> ingredients, boolean used, String formula, int id, String duration, String type, Integer kindOfMeal, long frequency) {
-    _name = name;
-    if (_name.contains("Chefkoch.de Rezept: ")) {
-      _name = _name.replace("Chefkoch.de Rezept: ", "");
+  // public Recipe(String name, ArrayList<Ingredient> ingredients, boolean used,
+  // String formula, int id, String duration, String type, Integer kindOfMeal,
+  // long frequency) {
+  // _name = name;
+  // if (_name.contains("Chefkoch.de Rezept: ")) {
+  // _name = _name.replace("Chefkoch.de Rezept: ", "");
+  // }
+  // if (_name.contains("'")) {
+  // _name = _name.replace("'", "");
+  // }
+  // if (ingredients != null) {
+  // _ingredients = ingredients;
+  // }
+  // else {
+  // _ingredients = new ArrayList<Ingredient>();
+  // }
+  // _used = used;
+  // _formula = formula;
+  // _id = id;
+  // if (duration != null) {
+  // _duration = duration;
+  // }
+  // else {
+  // _duration = "";
+  // }
+  // if (type != null) {
+  // _type = type;
+  // }
+  // else {
+  // _type = "";
+  // }
+  // this.frequency = frequency;
+  // _kindOfMeal = ToolConstants.KINDOFMEAL.intToMeal(kindOfMeal);
+  // _valueChangedMap = new BitSet(bitSetLength);
+  // }
+
+  public Recipe(int id, String name, String formula, String duration, ArrayList<Ingredient> ingredients, ArrayList<String> types, long frequency) {
+    this.id = id;
+    this.name = name;
+    if (this.name.contains("Chefkoch.de Rezept: ")) {
+      this.name = this.name.replace("Chefkoch.de Rezept: ", "");
     }
-    if (_name.contains("'")) {
-      _name = _name.replace("'", "");
+    if (this.name.contains("'")) {
+      this.name = this.name.replace("'", "");
     }
-    if (ingredients != null) {
-      _ingredients = ingredients;
-    }
-    else {
-      _ingredients = new ArrayList<Ingredient>();
-    }
-    _used = used;
-    _formula = formula;
-    _id = id;
-    if (duration != null) {
-      _duration = duration;
-    }
-    else {
-      _duration = "";
-    }
-    if (type != null) {
-      _type = type;
-    }
-    else {
-      _type = "";
-    }
+    this.formula = formula;
+    this.duration = duration;
+    this.ingredients = ingredients;
+    this.types = types;
     this.frequency = frequency;
-    _kindOfMeal = ToolConstants.KINDOFMEAL.intToMeal(kindOfMeal);
-    _valueChangedMap = new BitSet(bitSetLength);
+    valueChangedMap = new BitSet(bitSetLength);
   }
 
   @Override
   public int compareTo(Recipe compareRecipe) {
     int result = 0;
 
-    result += checkValue(!_name.equals(compareRecipe.getName()), 0);
+    result += checkValue(!name.equals(compareRecipe.getName()), 0);
     // result += checkValue(_used != compareRecipe.isUsed(), 1);
-    result += checkValue(!_formula.equals(compareRecipe.getFormula()), 2);
-    result += checkValue(!_duration.equals(compareRecipe.getDuration()), 3);
-    result += checkValue(!_type.equals(compareRecipe.getType()), 4);
-    result += checkValue(_kindOfMeal != compareRecipe.getKindOfMeal(), 5);
-    result += checkValue(_id != compareRecipe.getID(), 6);
+    result += checkValue(!formula.equals(compareRecipe.getFormula()), 2);
+    result += checkValue(!duration.equals(compareRecipe.getDuration()), 3);
+//    result += checkValue(!type.equals(compareRecipe.getType()), 4);
+    result += checkValue(id != compareRecipe.getID(), 6);
 
     boolean ingredChanged = false;
-    for (Ingredient ingredient : _ingredients) {
+    for (Ingredient ingredient : ingredients) {
       for (Ingredient compareIngredient : compareRecipe.getIngredients()) {
         if (ingredient.getID() == compareIngredient.getID()) {
           int compareValue = ingredient.compareTo(compareIngredient);
@@ -104,7 +120,7 @@ public class Recipe implements Serializable, Comparable<Recipe> {
     }
     checkValue(ingredChanged, 7);
 
-    result += checkValue(_ingredients.size() != compareRecipe.getIngredients().size(), 8);
+    result += checkValue(ingredients.size() != compareRecipe.getIngredients().size(), 8);
 
     return result;
   }
@@ -112,81 +128,73 @@ public class Recipe implements Serializable, Comparable<Recipe> {
   private int checkValue(boolean check, int index) {
     int result = 0;
     if (check) {
-      _valueChangedMap.set(index, true);
+      valueChangedMap.set(index, true);
       result = 1;
     }
     else {
-      _valueChangedMap.set(index, false);
+      valueChangedMap.set(index, false);
     }
     return result;
   }
 
   public void addIngredient(Ingredient ingred) {
-    _ingredients.add(ingred);
+    ingredients.add(ingred);
   }
 
   public ArrayList<Ingredient> getIngredients() {
-    return _ingredients;
+    return ingredients;
   }
 
   public String getFormula() {
-    return _formula;
+    return formula;
   }
 
   public boolean isUsed() {
-    return _used;
+    return used;
   }
 
   public void setUsed(Boolean value) {
-    _used = value;
+    used = value;
   }
 
   public String getName() {
-    return _name;
+    return name;
   }
 
   public void setName(String value) {
-    _name = value;
+    name = value;
   }
 
   public int getID() {
-    return _id;
+    return id;
   }
 
   public void setID(int id) {
-    _id = id;
+    this.id = id;
   }
 
   public void setFormula(String formula) {
-    _formula = formula;
+    this.formula = formula;
   }
 
   public String getDuration() {
-    return _duration;
+    return duration;
   }
 
   public void setDuration(String duration) {
-    _duration = duration;
+    this.duration = duration;
   }
 
-  public String getType() {
-    return _type;
+  public ArrayList<String> getType() {
+    return types;
   }
 
-  public void setType(String type) {
-    _type = type;
-  }
-
-  public ToolConstants.KINDOFMEAL getKindOfMeal() {
-    return _kindOfMeal;
-  }
-
-  public void setKindOfMeal(ToolConstants.KINDOFMEAL kindOfMeal) {
-    _kindOfMeal = kindOfMeal;
+  public void setType(ArrayList<String> types) {
+    this.types = types;
   }
 
   public BitSet getValueChangedMap() {
-    return _valueChangedMap;
+    return valueChangedMap;
   }
 
   public long getFrequency() {

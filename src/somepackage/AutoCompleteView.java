@@ -20,7 +20,7 @@ public class AutoCompleteView {
   }
 
   public List<String> completeText(String query) {
-    List<Recipe> recipes = ServeletBackbone.DataBaseControl.loadRecipeData(query.toUpperCase());
+    List<Recipe> recipes = ServeletBackbone.DataBaseControl.loadFilteredRecipesByName(query.toUpperCase());
     List<String> results = new ArrayList<String>();
     for (Recipe recipe : recipes) {
       results.add(recipe.getName());
