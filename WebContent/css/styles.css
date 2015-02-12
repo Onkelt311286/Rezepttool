@@ -79,20 +79,23 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 }
 .ui-toolbar .ui-button{
 	width: 10%;
-	margin-right: 1% !important;
+}
+.ui-toolbar .ui-inputfield{
+	width: 76.6%;
 }
 .ui-autocomplete{
 	width: 89%;
 }
 .ui-autocomplete .ui-inputfield{
-	width: 88%;
+	width: 86%;
 	border-radius: 3px;
 }
 .ui-autocomplete-dropdown{
-	margin-left: 1%;
+	margin-left: 1.2%;
 	border-radius: 3px;
-	top: -5% !important;
-	height: 110% !important;
+	top: -8% !important;
+	height: 120% !important;
+	width: 11.3% !important;
 }
 
 /* Tabmenu */

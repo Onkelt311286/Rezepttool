@@ -12,24 +12,39 @@
 	<p:toolbar>
 		<f:facet name="left">
 			<h:form>
-				<p:commandButton id="options" title="Optionen" type="button" icon="settings"/>
+				<p:commandButton id="options" style="margin-right: 1% !important;" title="Optionen" type="button" icon="settings"/>
 			    <p:menu toggleable="true" overlay="true" trigger="options" my="left top" at="left bottom">
 			        <p:menuitem value="Seite Drucken" />
 					<p:menuitem value="PDF exportieren" />
 					<p:menuitem value="Email versenden" />
 			        <p:submenu label="Einstellungen">
+			            <p:menuitem style="margin-left:10px" value="Gruppe verwalten" outcome="index" />
 			            <p:menuitem style="margin-left:10px" value="Datenbank ändern" />
 						<p:menuitem style="margin-left:10px" value="Mail ändern" />
 						<p:menuitem style="margin-left:10px" value="Sprache ändern" />
 			        </p:submenu>
 			    </p:menu>
 			    
-				
+        		<p:calendar id="calendar" value="#{dateBean.date}" placeholder="Tag wählen..." />
+        		
+        		<p:commandButton id="calendarSelect" style="margin-left: 1% !important;" title="Ansicht wählen" type="button" icon="ui-icon-triangle-1-s"/>
+        		<p:menu toggleable="true" overlay="true" trigger="calendarSelect" my="right top" at="right bottom">
+			        <p:menuitem value="Tagesansicht" />
+					<p:menuitem value="Wochenansicht" />
+					<p:menuitem value="Monatsansicht" />
+			    </p:menu>
 			</h:form>
 		</f:facet>
 	</p:toolbar>
 	<div id="content">
-		<p:calendar value="#{dateBean.date}" mode="inline" />
+		<p:schedule id="schedule" value="#{scheduleView.eventModel}" widgetVar="myschedule" timeZone="GMT+2">
+ <!-- 
+            <p:ajax event="dateSelect" listener="#{scheduleView.onDateSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+            <p:ajax event="eventSelect" listener="#{scheduleView.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+            <p:ajax event="eventMove" listener="#{scheduleView.onEventMove}" update="messages" />
+            <p:ajax event="eventResize" listener="#{scheduleView.onEventResize}" update="messages" />
+  -->
+        </p:schedule>
 	</div>
 	<h:form>
 		<p:tabMenu id="menubar" activeIndex="0" orientation="bottom">

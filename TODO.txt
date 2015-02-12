@@ -1,12 +1,37 @@
 ------------------------------- TODO, Rezepttool -------------------------------
-Art der Mahlzeit und Kategorie zusammenführen
+Index.xhtml (Startseite):
+personalisierte Anmeldung und Registrierung (Username, Email (nicht Pflicht), Passwort)
+--> nach dem Registrieren, fragen ob neue Gruppe anlegen oder einer bestehenden Gruppe beitreten
+--> Gruppe verlassen, neuer Gruppe beitreten in den Options
+--> Gruppen Email Adresse
 
-personalisierte Anmeldung und Rezepte
---> entsrepchende Datenbankänderungen
+week.xhtml (Wochenplaner):
+anderes MenüIcon
+Input aus dem Kalender Tag auswählen, verbinden mit ...
+Swiper mit Tages-, Wochen- und Monatsansicht (springt im Swiper zum ausgewählten Tag/ Default heute)
+Wie Rezepte eintragen? (verschieben möglich per Drag&Drop)
+--> Auswahl des Rezepts führt zur Detailansicht (zum bearbeiten)
 
-Link zum original Rezept, wenn vorhanden.
+Datenbank: Art der Mahlzeit und Kategorie zusammenführen
+Rezepte entsprechende Datenbankänderungen
+Link (und Bild) zum original Rezept, wenn vorhanden.
 
+recipe.xhtml (Rezeptliste):
+Filter nach Kategorien gruppieren (auf- und zuklappbar?)
+Vorlage von http://www.primefaces.org/showcase/ui/input/autoComplete.xhtml
+Panelliste mit Bild, Titel, Zeit und Beschreibung (max Length, auf- und zuklappbar)
+--> Auswahl des Rezepts führt zur Detailansicht (zum bearbeiten)
+
+Rezept Detailansichts Seite anlegen und stylen.
+
+fridge.xhtml (Kühlschrankfilter):
+Auswahl der Storeplaces
+Liste mit Checkboxen, zeigt Zutaten aus dem ausgewählten Storeplace
+
+shop.xhtml (Einkaufsliste):
 Einkaufsliste live auf der Seite anzeigen, mit Möglichkeit einzelne Zutaten abzuhaken.
+Liste mit Checkboxen, zeigt die Zutaten der im Wochenplaner angezeigten Rezepte (von einem Tag / einer Woche / einem Monat)
+--> Auswahl des Zeitraums ermöglichen
 
 Möglichkeit bieten Rezepte zu teilen.
 --> anderen leuten empfehlen
