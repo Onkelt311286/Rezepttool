@@ -1,6 +1,7 @@
 ------------------------------- TODO, Rezepttool -------------------------------
 Index.xhtml (Startseite):
 personalisierte Anmeldung und Registrierung (Username, Email (nicht Pflicht), Passwort)
+T--> ich finde Email hier nicht sinnvoll, damit man die Email nutzen kann muss man mehr angeben als nur die adresse, das müsste man dann auch alles hier unterbringen
 --> nach dem Registrieren, fragen ob neue Gruppe anlegen oder einer bestehenden Gruppe beitreten
 --> Gruppe verlassen, neuer Gruppe beitreten in den Options
 --> Gruppen Email Adresse
@@ -11,13 +12,23 @@ Input aus dem Kalender Tag auswählen, verbinden mit ...
 Swiper mit Tages-, Wochen- und Monatsansicht (springt im Swiper zum ausgewählten Tag/ Default heute)
 Wie Rezepte eintragen? (verschieben möglich per Drag&Drop)
 --> Auswahl des Rezepts führt zur Detailansicht (zum bearbeiten)
+T--> Der User sollte auswählen können, ob er nur eine Gruppe oder alle sehen möchte
 
-Datenbank: Art der Mahlzeit und Kategorie zusammenführen
-Rezepte entsprechende Datenbankänderungen
-Link (und Bild) zum original Rezept, wenn vorhanden.
+Datenbank:
+Link (und Bilder) zum original Rezept, wenn vorhanden.
+T--> neue Felder für URLs in der Rezept tabelle
+T---> Bei mehreren Bildern über URL müssen die URLs in eine eigene Tabelle
+T---> Alternativ die Bilder auf dem Server speichern
+T---> Bilder generell gefährlich wegen Rechten
+T----> nur eigene Verwenden
 
 recipe.xhtml (Rezeptliste):
 Filter nach Kategorien gruppieren (auf- und zuklappbar?)
+T--> was wird angezeigt, wenn man noch nicht gefiltert hat?
+T---> Es sollten initial alle seine Rezepte angezeigt werden
+T--> Der User sollte auswählen können, ob er nur eine Gruppe oder alle sehen möchte
+T---> Gruppen als eigenes GroupBy wo dann unter der jeweiligen Gruppe die Rezepte angezeigt werden
+T----> evtl. unpraktisch, da zu viele Rezepte in einer Gruppe
 Vorlage von http://www.primefaces.org/showcase/ui/input/autoComplete.xhtml
 Panelliste mit Bild, Titel, Zeit und Beschreibung (max Length, auf- und zuklappbar)
 --> Auswahl des Rezepts führt zur Detailansicht (zum bearbeiten)
@@ -38,6 +49,16 @@ Möglichkeit bieten Rezepte zu teilen.
 --> alle rezepte einsehbar
 
 Die configdatei muss da sein, ein automatisches anlegen einer neuen funktioniert nicht.
+--> nochmal prüfen, sollte eigentlich machbar sein, wird sie überhaupt benötigt?
+--> allte Daten können auch in der DB gespeichert werden.
+
+Änderungshistorie
+--> erfordert eigene Tabelle mit: Datum, User, alt, neu
+--> wie lange speichern?
+
+Undo Redo
+--> wie mit jsf umsetzen?
+--> nur mit Java Script?
 
 --------------------------- TODO, Einkaufslistentool ---------------------------
 
