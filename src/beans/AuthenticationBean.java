@@ -17,8 +17,7 @@ public class AuthenticationBean {
   private User   current;
 
   public String login() {
-    System.out.println(userName + " | " + password);
-    current = ServeletBackbone.DataBaseControl.loadUserData(userName, password);
+    current = ServeletBackbone.DataBaseControl.loadUserData(userName.toUpperCase(), password);
     if (current == null) {
       FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User unbekannt, bitte versuchen Sie es noch einmal"));
       return (userName = password = null);

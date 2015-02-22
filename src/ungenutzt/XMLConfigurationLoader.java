@@ -80,48 +80,48 @@ public class XMLConfigurationLoader {
     }
   }
 
-  private String decrypt(String password) {
-    String result = "";
-    try {
-      SecretKeySpec secretKeySpec = createSecretKeySpec();
-      BASE64Decoder myDecoder = new BASE64Decoder();
-      byte[] crypted = myDecoder.decodeBuffer(password);
-      Cipher cipher = Cipher.getInstance("AES");
-      cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
-      byte[] cipherData2 = cipher.doFinal(crypted);
-      result = new String(cipherData2);
-    }
-    catch (NoSuchAlgorithmException | IOException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
-      JOptionPane.showMessageDialog(null, e.toString(), languageBundle.getString("FailedToDecryptTitle"), JOptionPane.WARNING_MESSAGE);
-    }
-    return result;
-  }
-
-  public String encrypt(String password) {
-    String result = "";
-    try {
-      SecretKeySpec secretKeySpec = createSecretKeySpec();
-      Cipher cipher = Cipher.getInstance("AES");
-      cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
-      byte[] encrypted = cipher.doFinal(password.getBytes());
-      BASE64Encoder myEncoder = new BASE64Encoder();
-      result = myEncoder.encode(encrypted);
-    }
-    catch (NoSuchAlgorithmException | IOException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
-      JOptionPane.showMessageDialog(null, e.toString(), languageBundle.getString("FailedToEncryptTitle"), JOptionPane.WARNING_MESSAGE);
-    }
-    return result;
-  }
-
-  private SecretKeySpec createSecretKeySpec() throws UnsupportedEncodingException, NoSuchAlgorithmException {
-    String keyStr = "RecipeDBPWKey";
-    byte[] key = (keyStr).getBytes("UTF-8");
-    MessageDigest sha = MessageDigest.getInstance("MD5");
-    key = sha.digest(key);
-    key = Arrays.copyOf(key, 16);
-    SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
-    return secretKeySpec;
-  }
+//  private String decrypt(String password) {
+//    String result = "";
+//    try {
+//      SecretKeySpec secretKeySpec = createSecretKeySpec();
+//      BASE64Decoder myDecoder = new BASE64Decoder();
+//      byte[] crypted = myDecoder.decodeBuffer(password);
+//      Cipher cipher = Cipher.getInstance("AES");
+//      cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
+//      byte[] cipherData2 = cipher.doFinal(crypted);
+//      result = new String(cipherData2);
+//    }
+//    catch (NoSuchAlgorithmException | IOException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+//      JOptionPane.showMessageDialog(null, e.toString(), languageBundle.getString("FailedToDecryptTitle"), JOptionPane.WARNING_MESSAGE);
+//    }
+//    return result;
+//  }
+//
+//  public String encrypt(String password) {
+//    String result = "";
+//    try {
+//      SecretKeySpec secretKeySpec = createSecretKeySpec();
+//      Cipher cipher = Cipher.getInstance("AES");
+//      cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+//      byte[] encrypted = cipher.doFinal(password.getBytes());
+//      BASE64Encoder myEncoder = new BASE64Encoder();
+//      result = myEncoder.encode(encrypted);
+//    }
+//    catch (NoSuchAlgorithmException | IOException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+//      JOptionPane.showMessageDialog(null, e.toString(), languageBundle.getString("FailedToEncryptTitle"), JOptionPane.WARNING_MESSAGE);
+//    }
+//    return result;
+//  }
+//
+//  private SecretKeySpec createSecretKeySpec() throws UnsupportedEncodingException, NoSuchAlgorithmException {
+//    String keyStr = "RecipeDBPWKey";
+//    byte[] key = (keyStr).getBytes("UTF-8");
+//    MessageDigest sha = MessageDigest.getInstance("MD5");
+//    key = sha.digest(key);
+//    key = Arrays.copyOf(key, 16);
+//    SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
+//    return secretKeySpec;
+//  }
 
   private void createDataBaseFile() throws IOException, ConfigurationException {
     File dataBaseFile = new File(_dbSourceFileName + "\\RecipeDB.h2.db");

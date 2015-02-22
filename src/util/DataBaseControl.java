@@ -2,6 +2,11 @@ package util;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -10,6 +15,7 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,6 +23,11 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -29,6 +40,8 @@ import data.Group;
 import data.Ingredient;
 import data.Recipe;
 import data.User;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 import ungenutzt.IngredientFinderModel;
 import ungenutzt.PlanerDayPanel;
 import ungenutzt.PlanerPanel;
@@ -38,8 +51,8 @@ import ungenutzt.RecipeFinderModel;
 public class DataBaseControl {
   // private static final String dataBaseName =
   // "jdbc:h2:.\\db\\RecipeDB;MV_STORE=FALSE;MVCC=FALSE";
-  private static final String userName      = "";
-  private static final String userPassword  = "";
+  private static final String userName     = "";
+  private static final String userPassword = "";
 
   private String              dataBaseName = "";
 
@@ -62,35 +75,32 @@ public class DataBaseControl {
     // InitializeDataBase();
   }
 
-  // public boolean connect() {
-  // boolean success = false;
-  // try {
-  // Class.forName("org.h2.Driver");
-  // _connection = DriverManager.getConnection(_dataBaseName, userName,
-  // userPassword);
-  // _statement = _connection.createStatement();
-  // System.out.println("opening");
-  // success = true;
-  // }
-  // catch (SQLException | ClassNotFoundException e) {
-  // e.printStackTrace();
-  // JOptionPane.showMessageDialog(null, e.toString(),
-  // languageBundle.getString("NoDBConnectTitle"), JOptionPane.ERROR_MESSAGE);
-  // disconnect();
-  // }
-  // return success;
-  // }
+  public boolean connect() {
+    boolean success = false;
+    try {
+      Class.forName("org.h2.Driver");
+      _connection = DriverManager.getConnection(dataBaseName, userName, userPassword);
+      _statement = _connection.createStatement();
+      System.out.println("opening");
+      success = true;
+    }
+    catch (SQLException | ClassNotFoundException e) {
+      e.printStackTrace();
+      JOptionPane.showMessageDialog(null, e.toString(), languageBundle.getString("NoDBConnectTitle"), JOptionPane.ERROR_MESSAGE);
+      disconnect();
+    }
+    return success;
+  }
 
-  // public void disconnect() {
-  // try {
-  // System.out.println("closing");
-  // _connection.close();
-  // }
-  // catch (SQLException e) {
-  // JOptionPane.showMessageDialog(null, e.toString(),
-  // languageBundle.getString("NoDBDiconnectTitle"), JOptionPane.ERROR_MESSAGE);
-  // }
-  // }
+  public void disconnect() {
+    try {
+      System.out.println("closing");
+      _connection.close();
+    }
+    catch (SQLException e) {
+      JOptionPane.showMessageDialog(null, e.toString(), languageBundle.getString("NoDBDiconnectTitle"), JOptionPane.ERROR_MESSAGE);
+    }
+  }
 
   public boolean executeUpdate(String query) {
     boolean result = false;
@@ -155,24 +165,37 @@ public class DataBaseControl {
   // languageBundle.getString("NoDBConnectTitle"), JOptionPane.ERROR_MESSAGE);
   // }
   // }
-  
-  public User loadUserData(String userName, String password) {
+
+  public User loadUserData(String userName, String password) {    
     User user = null;
-    if(userName.equals("Test")){
-      user = new User();
+    if (connect()) {
+      ResultSet selectUser = executeQuery("SELECT UserID, Name, Password FROM Users WHERE UPPER(Name) = '" + userName + "';");
+      ArrayList<ArrayList<Object>> resultSelectUser = extractResultData(selectUser, 3);
+      if (resultSelectUser.size() == 1) {
+        for (ArrayList<Object> recipeRow : resultSelectUser) {
+          int userID = (int) recipeRow.get(0);
+          String name = (String) recipeRow.get(1);
+          String encryptedPassword = (String) recipeRow.get(2);
+          if(password.equals(decrypt(encryptedPassword))){
+            user = new User(userID, name);
+          }
+        }
+      }
+      else {
+        //TODO: should never happen ...
+        System.out.println("couldn't identifiy user");
+      }
+
+      disconnect();
     }
     return user;
   }
 
   public List<Recipe> loadFilteredRecipesByName(String query) {
-    List<Recipe> recipes = new ArrayList<Recipe>();
-    try {
-      Class.forName("org.h2.Driver");
-      _connection = DriverManager.getConnection(dataBaseName, userName, userPassword);
-      _statement = _connection.createStatement();
-
+    List<Recipe> recipes = null;
+    if (connect()) {
+      recipes = new ArrayList<Recipe>();
       query = query.replace("'", "''");
-
       ResultSet selectRecipes = executeQuery("SELECT RecipeID FROM Recipes WHERE UPPER(Name) like '%" + query + "%';");
       ArrayList<ArrayList<Object>> resultSelectRecipes = extractResultData(selectRecipes, 1);
       for (ArrayList<Object> recipeRow : resultSelectRecipes) {
@@ -180,18 +203,7 @@ public class DataBaseControl {
         Recipe recipe = loadRecipe(id);
         recipes.add(recipe);
       }
-    }
-    catch (ClassNotFoundException | SQLException e) {
-      System.out.println("Failed to load Recipes");
-      e.printStackTrace();
-    }
-    finally {
-      try {
-        _connection.close();
-      }
-      catch (SQLException e) {
-        e.printStackTrace();
-      }
+      disconnect();
     }
     return recipes;
   }
@@ -245,8 +257,8 @@ public class DataBaseControl {
     // languageBundle.getString("NoDBConnectTitle"), JOptionPane.ERROR_MESSAGE);
     // }
   }
-  
-  public Group loadGroup(int id){
+
+  public Group loadGroup(int id) {
     Group group = null;
     // TODO: über GroupIngredients Available auslesen. <-- wird Teil des
     // Gruppenobjektes
@@ -666,7 +678,52 @@ public class DataBaseControl {
     }
     return result;
   }
-  
+
+  private String decrypt(String password) {
+    String result = "";
+    try {
+      SecretKeySpec secretKeySpec = createSecretKeySpec();
+      BASE64Decoder myDecoder = new BASE64Decoder();
+      byte[] crypted = myDecoder.decodeBuffer(password);
+      Cipher cipher = Cipher.getInstance("AES");
+      cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
+      byte[] cipherData2 = cipher.doFinal(crypted);
+      result = new String(cipherData2);
+    }
+    catch (NoSuchAlgorithmException | IOException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+      System.out.println("Failed To Decrypt");
+      e.printStackTrace();
+    }
+    return result;
+  }
+
+  private String encrypt(String password) {
+    String result = "";
+    try {
+      SecretKeySpec secretKeySpec = createSecretKeySpec();
+      Cipher cipher = Cipher.getInstance("AES");
+      cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+      byte[] encrypted = cipher.doFinal(password.getBytes());
+      BASE64Encoder myEncoder = new BASE64Encoder();
+      result = myEncoder.encode(encrypted);
+    }
+    catch (NoSuchAlgorithmException | IOException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+      System.out.println("Failed To Encrypt");
+      e.printStackTrace();
+    }
+    return result;
+  }
+
+  private SecretKeySpec createSecretKeySpec() throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    String keyStr = "RecipeDBPWKey";
+    byte[] key = (keyStr).getBytes("UTF-8");
+    MessageDigest sha = MessageDigest.getInstance("MD5");
+    key = sha.digest(key);
+    key = Arrays.copyOf(key, 16);
+    SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
+    return secretKeySpec;
+  }
+
   public String getDataBaseName() {
     return dataBaseName;
   }
