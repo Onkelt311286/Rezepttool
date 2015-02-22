@@ -5,6 +5,7 @@ T--> ich finde Email hier nicht sinnvoll, damit man die Email nutzen kann muss m
 --> nach dem Registrieren, fragen ob neue Gruppe anlegen oder einer bestehenden Gruppe beitreten
 --> Gruppe verlassen, neuer Gruppe beitreten in den Options
 --> Gruppen Email Adresse
+http://stackoverflow.com/questions/3841361/jsf-http-session-login/3842060#3842060
 
 week.xhtml (Wochenplaner):
 anderes MenüIcon

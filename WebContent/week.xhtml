@@ -12,6 +12,11 @@
 	<p:toolbar>
 		<f:facet name="left">
 			<h:form>
+			  
+			  <h:panelGroup rendered="#{authenticationBean.loggedIn}">
+          <p>Welcome, #{authenticationBean.current.name}</p>
+        </h:panelGroup>
+			
 				<p:commandButton id="options" style="margin-right: 1% !important;" title="Optionen" type="button" icon="settings"/>
 			    <p:menu toggleable="true" overlay="true" trigger="options" my="left top" at="left bottom">
 			        <p:menuitem value="Seite Drucken" />
