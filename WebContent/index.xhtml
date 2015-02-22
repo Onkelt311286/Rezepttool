@@ -9,29 +9,31 @@
 	<link href="./css/styles.css" rel="stylesheet" type="text/css" />
 </h:head>
 <h:body>
-	<div style="width:100%;text-align:center">
-	<img style="margin: 10% auto" src="images/icons/icon_tool.png" width="30%" alt="Programmicon" />
-	<br/>
-	<p:commandButton value="Registrieren" oncomplete="PF('register').show()" />
+  <h:form>
+	 <div style="width:100%;text-align:center">
+	 <img style="margin: 10% auto" src="images/icons/icon_tool.png" width="30%" alt="Programmicon" />
+	 <br/>
+	 <p:commandButton value="Registrieren" oncomplete="PF('register').show()" />
 	
-	<h:panelGrid style="margin: 5% auto;text-align:left" columns="2" cellpadding="5">
-		<h:outputLabel for="user" value="Name: " />
-		<p:inputText id="user" label="username" value="#{loginBean.user}"/>
+	 <h:panelGrid style="margin: 5% auto;text-align:left" columns="2" cellpadding="5">
+		  <h:outputLabel for="user" value="Name: " />
+		  <p:inputText id="user" label="username" value="#{authenticationBean.userName}"/>
 
-		<h:outputLabel for="password" value="Passwort: " />
-		<p:password id="password" label="password" value="#{loginBean.password}"/>
-	</h:panelGrid>
-	<p:commandButton value="Login" outcome="week" />
-	</div>
+		  <h:outputLabel for="password" value="Passwort: " />
+		  <p:password id="password" label="password" value="#{authenticationBean.password}"/>
+	 </h:panelGrid>
+	 <p:commandButton value="Login" action="#{authenticationBean.login}" />
+	 </div>
+	</h:form>
 	
 	<h:form>
 		<p:dialog widgetVar="register" modal="true" header="Registrieren">
 	        <p:panelGrid columns="2">
 	            <h:outputLabel for="user" value="Name: " />
-				<p:inputText id="user" label="username" value="#{registerBean.user}"/>
+				<p:inputText id="user" label="username" value="#{authenticationBean.userName}"/>
 		
 				<h:outputLabel for="password" value="Passwort: " />
-				<p:password id="password" label="password" value="#{registerBean.password}"/>
+				<p:password id="password" label="password" value="#{authenticationBean.password}"/>
 	        </p:panelGrid>
 	        <p:commandButton style="margin-top:10px" value="Registrieren" outcome="week" />
 	    </p:dialog>

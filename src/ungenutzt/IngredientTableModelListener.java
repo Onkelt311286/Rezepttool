@@ -10,11 +10,8 @@ import javax.swing.RowSorter.SortKey;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
-import mainwindow.MainWindow;
-import mainwindow.data.Ingredient;
-import mainwindow.data.Recipe;
-import recipedetails.ingredient.IngredientDetailsModel;
-import recipefinder.ingredient.IngredientFinderModel;
+import data.Ingredient;
+import data.Recipe;
 
 public class IngredientTableModelListener implements TableModelListener {
 

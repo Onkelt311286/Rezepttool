@@ -7,8 +7,6 @@ import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.table.TableModel;
 
-import recipedetails.ingredient.IngredientDetailsModel;
-
 
 public class RecipeModelListener implements TableModelListener {
 

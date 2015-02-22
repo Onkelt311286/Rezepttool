@@ -24,15 +24,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import recipedetails.recipe.RecipeDetailsModel;
-import recipefinder.ingredient.IngredientFinderModel;
-import recipefinder.recipe.RecipeFinderModel;
-import somepackage.Group;
-import mainwindow.data.DayPlan;
-import mainwindow.data.Ingredient;
-import mainwindow.data.Recipe;
-import mainwindow.planer.PlanerDayPanel;
-import mainwindow.planer.PlanerPanel;
+import data.DayPlan;
+import data.Group;
+import data.Ingredient;
+import data.Recipe;
+import data.User;
+import ungenutzt.IngredientFinderModel;
+import ungenutzt.PlanerDayPanel;
+import ungenutzt.PlanerPanel;
+import ungenutzt.RecipeDetailsModel;
+import ungenutzt.RecipeFinderModel;
 
 public class DataBaseControl {
   // private static final String dataBaseName =
@@ -40,7 +41,7 @@ public class DataBaseControl {
   private static final String userName      = "";
   private static final String userPassword  = "";
 
-  private String              _dataBaseName = "";
+  private String              dataBaseName = "";
 
   private Connection          _connection;
   private Statement           _statement;
@@ -52,11 +53,11 @@ public class DataBaseControl {
     _statement = null;
     this.languageBundle = languageBundle;
 
-    _dataBaseName = dbSource;
-    if (_dataBaseName.endsWith(".h2.db")) {
-      _dataBaseName = _dataBaseName.replace(".h2.db", "");
+    dataBaseName = dbSource;
+    if (dataBaseName.endsWith(".h2.db")) {
+      dataBaseName = dataBaseName.replace(".h2.db", "");
     }
-    _dataBaseName = "jdbc:h2:" + _dataBaseName + "\\RecipeDB" + ";MV_STORE=FALSE;MVCC=FALSE";
+    dataBaseName = "jdbc:h2:" + dataBaseName + "\\RecipeDB" + ";MV_STORE=FALSE;MVCC=FALSE";
 
     // InitializeDataBase();
   }
@@ -154,12 +155,20 @@ public class DataBaseControl {
   // languageBundle.getString("NoDBConnectTitle"), JOptionPane.ERROR_MESSAGE);
   // }
   // }
+  
+  public User loadUserData(String userName, String password) {
+    User user = null;
+    if(userName.equals("Test")){
+      user = new User();
+    }
+    return user;
+  }
 
   public List<Recipe> loadFilteredRecipesByName(String query) {
     List<Recipe> recipes = new ArrayList<Recipe>();
     try {
       Class.forName("org.h2.Driver");
-      _connection = DriverManager.getConnection(_dataBaseName, userName, userPassword);
+      _connection = DriverManager.getConnection(dataBaseName, userName, userPassword);
       _statement = _connection.createStatement();
 
       query = query.replace("'", "''");
@@ -656,5 +665,13 @@ public class DataBaseControl {
       result = languageBundle.getString("NewRecipe");
     }
     return result;
+  }
+  
+  public String getDataBaseName() {
+    return dataBaseName;
+  }
+
+  public void setDataBaseName(String dataBaseName) {
+    this.dataBaseName = dataBaseName;
   }
 }

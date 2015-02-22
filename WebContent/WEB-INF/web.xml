@@ -5,7 +5,7 @@
 	version="3.0">
 	 <servlet>
     <servlet-name>ServeletBackbone</servlet-name>
-    <servlet-class>somepackage.ServeletBackbone</servlet-class>
+    <servlet-class>util.ServeletBackbone</servlet-class>
     <load-on-startup>0</load-on-startup>
   </servlet>
 	<servlet>
