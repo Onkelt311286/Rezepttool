@@ -5,6 +5,7 @@ T--> ich finde Email hier nicht sinnvoll, damit man die Email nutzen kann muss m
 --> nach dem Registrieren, fragen ob neue Gruppe anlegen oder einer bestehenden Gruppe beitreten
 --> Gruppe verlassen, neuer Gruppe beitreten in den Options
 --> Gruppen Email Adresse
+http://stackoverflow.com/questions/3841361/jsf-http-session-login/3842060#3842060
 
 week.xhtml (Wochenplaner):
 anderes MenüIcon
@@ -21,6 +22,7 @@ T---> Bei mehreren Bildern über URL müssen die URLs in eine eigene Tabelle
 T---> Alternativ die Bilder auf dem Server speichern
 T---> Bilder generell gefährlich wegen Rechten
 T----> nur eigene Verwenden
+T--> Matching Tabelle GroupUsers erweitern um Berechtigungen
 
 recipe.xhtml (Rezeptliste):
 Filter nach Kategorien gruppieren (auf- und zuklappbar?)
@@ -32,6 +34,8 @@ T----> evtl. unpraktisch, da zu viele Rezepte in einer Gruppe
 Vorlage von http://www.primefaces.org/showcase/ui/input/autoComplete.xhtml
 Panelliste mit Bild, Titel, Zeit und Beschreibung (max Length, auf- und zuklappbar)
 --> Auswahl des Rezepts führt zur Detailansicht (zum bearbeiten)
+--> Alternativ Zutaten angeben und auswählen
+---> In der Matching Tabelle RecipeIngredients eine neue Spalte für alternative Zutat
 
 Rezept Detailansichts Seite anlegen und stylen.
 
@@ -47,10 +51,10 @@ Liste mit Checkboxen, zeigt die Zutaten der im Wochenplaner angezeigten Rezepte 
 Möglichkeit bieten Rezepte zu teilen.
 --> anderen leuten empfehlen
 --> alle rezepte einsehbar
-
-Die configdatei muss da sein, ein automatisches anlegen einer neuen funktioniert nicht.
---> nochmal prüfen, sollte eigentlich machbar sein, wird sie überhaupt benötigt?
---> allte Daten können auch in der DB gespeichert werden.
+--> Kann ein Rezept in mehreren Gruppen sein? Wenn ja, was passiert wenn ein User Änderungen vornimmt?
+---> Vlt. für jedes Rezept den Autoren speichern und nur er darf es ändern
+----> Nachricht an Autoren verfassen, wenn man etwas ändern möchte
+---> die Möglichkeit bieten, ein Rezept in seine Gruppe zu kopieren, so dass man selber Autor wird.
 
 Änderungshistorie
 --> erfordert eigene Tabelle mit: Datum, User, alt, neu
