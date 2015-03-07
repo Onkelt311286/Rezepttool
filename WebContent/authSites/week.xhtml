@@ -9,14 +9,16 @@
 	<link href="./../css/styles.css" rel="stylesheet" type="text/css" />
 </h:head>
 <h:body>
-	<p:toolbar>
+	<p:toolbar id="toolbar">
 		<f:facet name="left">
 			<h:form>
-			  
-			  <h:panelGroup rendered="#{authenticationBean.loggedIn}">
-          <p>Welcome, #{authenticationBean.current.name}</p>
-        </h:panelGroup>
-			
+				
+				<p:dialog visible="#{authenticationBean.dialogVisible}" widgetVar="welcome" modal="true" header="Rezepttool" onHide="#{authenticationBean.invisibleDialog}">
+				  <h:panelGroup rendered="#{authenticationBean.loggedIn}">
+				  	<h:outputText value="Willkommen, #{authenticationBean.current.name}" />
+				  </h:panelGroup>
+				</p:dialog>
+				
 				<p:commandButton id="options" style="margin-right: 1% !important;" title="Optionen" type="button" icon="settings"/>
 			    <p:menu toggleable="true" overlay="true" trigger="options" my="left top" at="left bottom">
 			        <p:menuitem value="Seite Drucken" />
@@ -33,11 +35,6 @@
         		<p:calendar id="calendar" value="#{dateBean.date}" placeholder="Tag wählen..." />
         		
         		<p:commandButton id="calendarSelect" style="margin-left: 1% !important;" title="Ansicht wählen" type="button" icon="ui-icon-triangle-1-s"/>
-        		<p:menu toggleable="true" overlay="true" trigger="calendarSelect" my="right top" at="right bottom">
-			        <p:menuitem value="Tagesansicht" />
-					<p:menuitem value="Wochenansicht" />
-					<p:menuitem value="Monatsansicht" />
-			    </p:menu>
 			</h:form>
 		</f:facet>
 	</p:toolbar>
@@ -51,13 +48,18 @@
   -->
         </p:schedule>
 	</div>
-	<h:form>
-		<p:tabMenu id="menubar" activeIndex="0" orientation="bottom">
+	<h:form id="menubar">
+		<p:tabMenu activeIndex="0" orientation="bottom">
 			<p:menuitem title="Wochenplaner" outcome="week" icon="pot" />
 			<p:menuitem title="Rezeptliste" outcome="recipe" icon="recipe" />
 			<p:menuitem title="Kühlschrankfilter" outcome="fridge" icon="fridge" />
 			<p:menuitem title="Einkaufsliste" outcome="shop" icon="shop" />
 		</p:tabMenu>
 	</h:form>
+	
+	<script type="text/javascript">
+		$("#menubar").height($(".ui-tabmenu").height());
+		$("#content").height(window.innerHeight - $("#toolbar").height() - $(".ui-tabmenu").height() - 10);
+	</script>
 </h:body>
 </html>

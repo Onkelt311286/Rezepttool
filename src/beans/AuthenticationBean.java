@@ -15,6 +15,7 @@ public class AuthenticationBean {
   private String userName;
   private String password;
   private User   current;
+  private boolean dialogVisible;
 
   public String login() {
     current = ServeletBackbone.DataBaseControl.loadUserData(userName.toUpperCase(), password);
@@ -24,6 +25,7 @@ public class AuthenticationBean {
       return (userName = password = null);
     }
     else {
+    dialogVisible = true;
       System.out.println("Login complete");
       return "authSites/week?faces-redirect=true";
     }
@@ -32,6 +34,12 @@ public class AuthenticationBean {
   public String logout() {
     FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
     return "index?faces-redirect=true";
+  }
+  
+  public boolean isInvisibleDialog(){
+	  System.out.println("invisibling dialog");
+	  dialogVisible = false;
+	  return dialogVisible;
   }
 
   public boolean isLoggedIn() {
@@ -56,5 +64,13 @@ public class AuthenticationBean {
 
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public boolean isDialogVisible() {
+	return dialogVisible;
+  }
+
+  public void setDialogVisible(boolean dialogVisible) {
+	this.dialogVisible = dialogVisible;
   }
 }

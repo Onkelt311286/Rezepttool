@@ -9,7 +9,7 @@
 	<link href="./../css/styles.css" rel="stylesheet" type="text/css" />
 </h:head>
 <h:body>
-	<p:toolbar>
+	<p:toolbar id="toolbar">
 		<f:facet name="left">
 			<h:form>
 				<p:commandButton id="options" title="Optionen" type="button" icon="settings"/>
@@ -32,13 +32,18 @@
 	<div id="content">
 		Einkaufsliste
 	</div>
-	<h:form>
-		<p:tabMenu id="menubar" activeIndex="3" orientation="bottom">
+	<h:form id="menubar">
+		<p:tabMenu activeIndex="3" orientation="bottom">
 			<p:menuitem title="Wochenplaner" outcome="week" icon="pot" />
 			<p:menuitem title="Rezeptliste" outcome="recipe" icon="recipe" />
 			<p:menuitem title="Kühlschrankfilter" outcome="fridge" icon="fridge" />
 			<p:menuitem title="Einkaufsliste" outcome="shop" icon="shop" />
 		</p:tabMenu>
 	</h:form>
+	
+	<script type="text/javascript">
+		$("#menubar").height($(".ui-tabmenu").height());
+		$("#content").height(window.innerHeight - $("#toolbar").height() - $(".ui-tabmenu").height() - 10);
+	</script>
 </h:body>
 </html>
