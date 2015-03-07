@@ -19,11 +19,13 @@ public class AuthenticationBean {
   public String login() {
     current = ServeletBackbone.DataBaseControl.loadUserData(userName.toUpperCase(), password);
     if (current == null) {
+      System.out.println("User unbekannt, bitte versuchen Sie es noch einmal");
       FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User unbekannt, bitte versuchen Sie es noch einmal"));
       return (userName = password = null);
     }
     else {
-      return "week?faces-redirect=true";
+      System.out.println("Login complete");
+      return "authSites/week?faces-redirect=true";
     }
   }
 

@@ -5,37 +5,36 @@
     xmlns:f="http://java.sun.com/jsf/core" 
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<title>Rezeptliste</title>
-	<link href="./css/styles.css" rel="stylesheet" type="text/css" />
+	<title>Kühlschrankfilter</title>
+	<link href="./../css/styles.css" rel="stylesheet" type="text/css" />
 </h:head>
 <h:body>
 	<p:toolbar>
 		<f:facet name="left">
-			<h:form>			
+			<h:form>
 				<p:commandButton id="options" style="margin-right: 1% !important;" title="Optionen" type="button" icon="settings"/>
 			    <p:menu toggleable="true" overlay="true" trigger="options" my="left top" at="left bottom">
 			        <p:menuitem value="Seite Drucken" />
 					<p:menuitem value="PDF exportieren" />
 					<p:menuitem value="Email versenden" />
 			        <p:submenu label="Einstellungen">
-			            <p:menuitem style="margin-left:10px" value="Gruppe verwalten" outcome="index" />
+			            <p:menuitem style="margin-left:10px" value="Gruppe verwalten" outcome="/index" />
 			            <p:menuitem style="margin-left:10px" value="Datenbank ändern" />
 						<p:menuitem style="margin-left:10px" value="Mail ändern" />
 						<p:menuitem style="margin-left:10px" value="Sprache ändern" />
 			        </p:submenu>
 			    </p:menu>
 			    
-				<p:autoComplete id="filter" dropdown="true" scrollHeight="250"
-							placeholder="Rezepte durchsuchen..." emptyMessage="Keine Treffer"
-							value="#{autoCompleteRecipeBean.filterString}" completeMethod="#{autoCompleteRecipeBean.completeText}" />
+			    <p:autoComplete id="section" dropdown="true" scrollHeight="250"
+							placeholder="Kühlschrankbereich wählen..." emptyMessage="Keine Treffer" />
 			</h:form>
 		</f:facet>
 	</p:toolbar>
 	<div id="content">
-		Rezepte
+		Kühlschrankfilter
 	</div>
 	<h:form>
-		<p:tabMenu id="menubar" activeIndex="1" orientation="bottom">
+		<p:tabMenu id="menubar" activeIndex="2" orientation="bottom">
 			<p:menuitem title="Wochenplaner" outcome="week" icon="pot" />
 			<p:menuitem title="Rezeptliste" outcome="recipe" icon="recipe" />
 			<p:menuitem title="Kühlschrankfilter" outcome="fridge" icon="fridge" />

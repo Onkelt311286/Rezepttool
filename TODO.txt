@@ -1,11 +1,11 @@
 ------------------------------- TODO, Rezepttool -------------------------------
 Index.xhtml (Startseite):
-personalisierte Anmeldung und Registrierung (Username, Email (nicht Pflicht), Passwort)
-T--> ich finde Email hier nicht sinnvoll, damit man die Email nutzen kann muss man mehr angeben als nur die adresse, das müsste man dann auch alles hier unterbringen
+Registrierung (Username, Email (nicht Pflicht), Passwort)
 --> nach dem Registrieren, fragen ob neue Gruppe anlegen oder einer bestehenden Gruppe beitreten
 --> Gruppe verlassen, neuer Gruppe beitreten in den Options
 --> Gruppen Email Adresse
 http://stackoverflow.com/questions/3841361/jsf-http-session-login/3842060#3842060
+http://www.journaldev.com/1933/java-servlet-filter-example-tutorial
 
 week.xhtml (Wochenplaner):
 anderes MenüIcon
