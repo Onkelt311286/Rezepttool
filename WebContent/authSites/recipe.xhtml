@@ -29,22 +29,27 @@
 				<p:autoComplete id="filter" dropdown="true" scrollHeight="250"
 							placeholder="Rezepte durchsuchen..." emptyMessage="Keine Treffer"
 							value="#{autoCompleteRecipeBean.filterString}" completeMethod="#{autoCompleteRecipeBean.completeText}" >
-								<p:ajax event="itemSelect" listener="#{autoCompleteRecipeBean.handleSelect}" resetValues="true" update="recipeScroller" />
+								<p:ajax event="query" listener="#{autoCompleteRecipeBean.handleSelect}" resetValues="true" update="recipeList" />
 				</p:autoComplete>
 				
 			</f:facet>
 		</p:toolbar>
 		<div id="content">
-		    <p:dataScroller value="#{autoCompleteRecipeBean.recipes}" var="recipe" widgetVar="recipeScroller" id="recipeScroller" chunkSize="10" mode="inline" scrollHeight="800">
+			<p:dataList value="#{autoCompleteRecipeBean.recipes}" var="recipe" id="recipeList" type="definition">
 	            
 	            <p:panel styleClass="toggleable" header="#{recipe.name}" toggleable="true" widgetVar="panel#{recipe.id}" style="margin-bottom:10px">
-			    	<h:panelGrid columns="2" cellpadding="10" width="100%">
+			    	<h:panelGrid columns="3" cellpadding="10" width="100%">
 			            <h:graphicImage value="../images/icons/pot.png" />
 			            <h:outputText value="#{recipe.formula}" />
+			            <p:dataList value="#{recipe.ingredients}" var="ingredient" type="definition">
+			            	#{ingredient.name}
+			            </p:dataList>
 			        </h:panelGrid>
+			        <p:separator />
+			        <h:outputText value="#{recipe.duration}" />
 			    </p:panel>
 			    
-		    </p:dataScroller>
+		    </p:dataList>
 		</div>
 	</h:form>
 	<h:form id="menubar">
@@ -59,8 +64,6 @@
 	<script type="text/javascript">
 		$("#menubar").height($(".ui-tabmenu").height());
 		$("#content").height(window.innerHeight - $("#toolbar").height() - $(".ui-tabmenu").height() - 10);
-		$("#recipeScroller").attr('scrollHeight',($("#content").height() - 10));
-		$(".ui-datascroller-content").css('height',($("#content").height() - 10));
 	</script>
 </h:body>
 </html>

@@ -74,6 +74,15 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 #content{
 	overflow: auto;
 }
+.ui-datalist-content{
+	background: none;
+}
+.ui-datalist-data{
+	margin: 10px;
+}
+.ui-datalist.item{
+	background-color: #fff;
+}
 
 /* Toolbar */
 .ui-toolbar{
