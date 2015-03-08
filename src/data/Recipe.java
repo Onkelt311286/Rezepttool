@@ -20,22 +20,22 @@ public class Recipe implements Serializable, Comparable<Recipe> {
   private BitSet                valueChangedMap;
   private long                  frequency;
 
-//  public Recipe(String name) {
-//    _name = name;
-//    if (_name.contains("Chefkoch.de Rezept: ")) {
-//      _name = _name.replace("Chefkoch.de Rezept: ", "");
-//    }
-//    if (_name.contains("'")) {
-//      _name = _name.replace("'", "");
-//    }
-//    _ingredients = new ArrayList<Ingredient>();
-//    _used = false;
-//    _formula = "";
-//    _id = -1;
-//    _duration = "";
-//    types = new ArrayList<String>();
-//    _valueChangedMap = new BitSet(bitSetLength);
-//  }
+  // public Recipe(String name) {
+  // _name = name;
+  // if (_name.contains("Chefkoch.de Rezept: ")) {
+  // _name = _name.replace("Chefkoch.de Rezept: ", "");
+  // }
+  // if (_name.contains("'")) {
+  // _name = _name.replace("'", "");
+  // }
+  // _ingredients = new ArrayList<Ingredient>();
+  // _used = false;
+  // _formula = "";
+  // _id = -1;
+  // _duration = "";
+  // types = new ArrayList<String>();
+  // _valueChangedMap = new BitSet(bitSetLength);
+  // }
 
   // public Recipe(String name, ArrayList<Ingredient> ingredients, boolean used,
   // String formula, int id, String duration, String type, Integer kindOfMeal,
@@ -92,50 +92,56 @@ public class Recipe implements Serializable, Comparable<Recipe> {
 
   @Override
   public int compareTo(Recipe compareRecipe) {
-    int result = 0;
-
-    result += checkValue(!name.equals(compareRecipe.getName()), 0);
-    // result += checkValue(_used != compareRecipe.isUsed(), 1);
-    result += checkValue(!formula.equals(compareRecipe.getFormula()), 2);
-    result += checkValue(!duration.equals(compareRecipe.getDuration()), 3);
-//    result += checkValue(!type.equals(compareRecipe.getType()), 4);
-    result += checkValue(id != compareRecipe.getID(), 6);
-
-    boolean ingredChanged = false;
-    for (Ingredient ingredient : ingredients) {
-      for (Ingredient compareIngredient : compareRecipe.getIngredients()) {
-        if (ingredient.getID() == compareIngredient.getID()) {
-          int compareValue = ingredient.compareTo(compareIngredient);
-          if (compareValue > 0) {
-            if (compareValue != 100) {
-              ingredChanged = true;
-            }
-            else {
-              checkValue(true, 9);
-            }
-            result++;
-          }
-        }
-      }
-    }
-    checkValue(ingredChanged, 7);
-
-    result += checkValue(ingredients.size() != compareRecipe.getIngredients().size(), 8);
-
-    return result;
+    return this.name.compareTo(compareRecipe.getName());
   }
 
-  private int checkValue(boolean check, int index) {
-    int result = 0;
-    if (check) {
-      valueChangedMap.set(index, true);
-      result = 1;
-    }
-    else {
-      valueChangedMap.set(index, false);
-    }
-    return result;
-  }
+  // @Override
+  // public int compareTo(Recipe compareRecipe) {
+  // int result = 0;
+  //
+  // result += checkValue(!name.equals(compareRecipe.getName()), 0);
+  // // result += checkValue(_used != compareRecipe.isUsed(), 1);
+  // result += checkValue(!formula.equals(compareRecipe.getFormula()), 2);
+  // result += checkValue(!duration.equals(compareRecipe.getDuration()), 3);
+  // // result += checkValue(!type.equals(compareRecipe.getType()), 4);
+  // result += checkValue(id != compareRecipe.getID(), 6);
+  //
+  // boolean ingredChanged = false;
+  // for (Ingredient ingredient : ingredients) {
+  // for (Ingredient compareIngredient : compareRecipe.getIngredients()) {
+  // if (ingredient.getID() == compareIngredient.getID()) {
+  // int compareValue = ingredient.compareTo(compareIngredient);
+  // if (compareValue > 0) {
+  // if (compareValue != 100) {
+  // ingredChanged = true;
+  // }
+  // else {
+  // checkValue(true, 9);
+  // }
+  // result++;
+  // }
+  // }
+  // }
+  // }
+  // checkValue(ingredChanged, 7);
+  //
+  // result += checkValue(ingredients.size() !=
+  // compareRecipe.getIngredients().size(), 8);
+  //
+  // return result;
+  // }
+
+  // private int checkValue(boolean check, int index) {
+  // int result = 0;
+  // if (check) {
+  // valueChangedMap.set(index, true);
+  // result = 1;
+  // }
+  // else {
+  // valueChangedMap.set(index, false);
+  // }
+  // return result;
+  // }
 
   public void addIngredient(Ingredient ingred) {
     ingredients.add(ingred);
@@ -165,11 +171,11 @@ public class Recipe implements Serializable, Comparable<Recipe> {
     name = value;
   }
 
-  public int getID() {
+  public int getId() {
     return id;
   }
 
-  public void setID(int id) {
+  public void setId(int id) {
     this.id = id;
   }
 

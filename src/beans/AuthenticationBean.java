@@ -12,9 +12,9 @@ import data.User;
 @SessionScoped
 public class AuthenticationBean {
 
-  private String userName;
-  private String password;
-  private User   current;
+  private String  userName;
+  private String  password;
+  private User    current;
   private boolean dialogVisible;
 
   public String login() {
@@ -25,8 +25,7 @@ public class AuthenticationBean {
       return (userName = password = null);
     }
     else {
-    dialogVisible = true;
-      System.out.println("Login complete");
+      dialogVisible = true;
       return "authSites/week?faces-redirect=true";
     }
   }
@@ -35,11 +34,10 @@ public class AuthenticationBean {
     FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
     return "index?faces-redirect=true";
   }
-  
-  public boolean isInvisibleDialog(){
-	  System.out.println("invisibling dialog");
-	  dialogVisible = false;
-	  return dialogVisible;
+
+  public boolean isInvisibleDialog() {
+    dialogVisible = false;
+    return dialogVisible;
   }
 
   public boolean isLoggedIn() {
@@ -67,10 +65,10 @@ public class AuthenticationBean {
   }
 
   public boolean isDialogVisible() {
-	return dialogVisible;
+    return dialogVisible;
   }
 
   public void setDialogVisible(boolean dialogVisible) {
-	this.dialogVisible = dialogVisible;
+    this.dialogVisible = dialogVisible;
   }
 }

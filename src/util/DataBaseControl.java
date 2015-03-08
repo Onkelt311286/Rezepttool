@@ -1,7 +1,5 @@
 package util;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
@@ -12,15 +10,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
 import javax.crypto.BadPaddingException;
@@ -29,24 +22,19 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
+import ungenutzt.IngredientFinderModel;
+import ungenutzt.PlanerPanel;
+import ungenutzt.RecipeDetailsModel;
+import ungenutzt.RecipeFinderModel;
 import data.DayPlan;
 import data.Group;
 import data.Ingredient;
 import data.Recipe;
 import data.User;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
-import ungenutzt.IngredientFinderModel;
-import ungenutzt.PlanerDayPanel;
-import ungenutzt.PlanerPanel;
-import ungenutzt.RecipeDetailsModel;
-import ungenutzt.RecipeFinderModel;
 
 public class DataBaseControl {
   // private static final String dataBaseName =
@@ -61,6 +49,8 @@ public class DataBaseControl {
 
   private ResourceBundle      languageBundle;
 
+  private int                 connectionCounter;
+
   public DataBaseControl(String dbSource, ResourceBundle languageBundle) {
     _connection = null;
     _statement = null;
@@ -71,7 +61,7 @@ public class DataBaseControl {
       dataBaseName = dataBaseName.replace(".h2.db", "");
     }
     dataBaseName = "jdbc:h2:" + dataBaseName + "\\RecipeDB" + ";MV_STORE=FALSE;MVCC=FALSE";
-
+    connectionCounter = 0;
     // InitializeDataBase();
   }
 
@@ -81,7 +71,8 @@ public class DataBaseControl {
       Class.forName("org.h2.Driver");
       _connection = DriverManager.getConnection(dataBaseName, userName, userPassword);
       _statement = _connection.createStatement();
-      System.out.println("opening");
+      connectionCounter++;
+      System.out.println("opening Counter = " + connectionCounter);
       success = true;
     }
     catch (SQLException | ClassNotFoundException e) {
@@ -94,7 +85,8 @@ public class DataBaseControl {
 
   public void disconnect() {
     try {
-      System.out.println("closing");
+      connectionCounter--;
+      System.out.println("closing Counter = " + connectionCounter);
       _connection.close();
     }
     catch (SQLException e) {
@@ -166,24 +158,21 @@ public class DataBaseControl {
   // }
   // }
 
-  public User loadUserData(String userName, String password) {    
+  public User loadUserData(String userName, String password) {
     User user = null;
     if (connect()) {
       ResultSet selectUser = executeQuery("SELECT UserID, Name, Password FROM Users WHERE UPPER(Name) = '" + userName + "';");
       ArrayList<ArrayList<Object>> resultSelectUser = extractResultData(selectUser, 3);
+
       if (resultSelectUser.size() == 1) {
         for (ArrayList<Object> recipeRow : resultSelectUser) {
           int userID = (int) recipeRow.get(0);
           String name = (String) recipeRow.get(1);
           String encryptedPassword = (String) recipeRow.get(2);
-          if(password.equals(decrypt(encryptedPassword))){
+          if (password.equals(decrypt(encryptedPassword))) {
             user = new User(userID, name);
           }
         }
-      }
-      else {
-        //TODO: should never happen ...
-        System.out.println("couldn't identifiy user");
       }
 
       disconnect();
@@ -205,6 +194,7 @@ public class DataBaseControl {
       }
       disconnect();
     }
+    Collections.sort(recipes);
     return recipes;
   }
 
@@ -287,6 +277,7 @@ public class DataBaseControl {
         Ingredient ingred = loadIngredient(recipe, (int) idRow.get(1));
         ingredients.add(ingred);
       }
+      Collections.sort(ingredients);
 
       ResultSet selectTypeIDs = executeQuery("SELECT * FROM RecipeTypes WHERE Recipe = " + id + ";");
       ArrayList<ArrayList<Object>> resultSelectTypeIDs = extractResultData(selectTypeIDs, 2);
@@ -436,8 +427,8 @@ public class DataBaseControl {
 
   private boolean isRecipeAltered(Recipe recipe) {
     boolean result = false;
-    if (recipe.getID() > -1) {
-      Recipe storedRecipe = loadRecipe(recipe.getID());
+    if (recipe.getId() > -1) {
+      Recipe storedRecipe = loadRecipe(recipe.getId());
       if (recipe.compareTo(storedRecipe) > 0) {
         result = true;
       }
@@ -501,16 +492,16 @@ public class DataBaseControl {
 
     int available = 0;
     if (ingred.isAvailable()) available = 1;
-    if (ingred.getID() > -1) {
-      executeUpdate("UPDATE Ingredients SET Name = '" + ingred.getName() + "', Available = " + available + ", Amount = '" + ingred.getAmount() + "', OrderInRecipe = " + ingred.getOrder() + ", StorePlace = '" + ingred.getStorePlace() + "' WHERE Ingredient_ID = '" + ingred.getID() + "';");
+    if (ingred.getId() > -1) {
+      executeUpdate("UPDATE Ingredients SET Name = '" + ingred.getName() + "', Available = " + available + ", Amount = '" + ingred.getAmount() + "', OrderInRecipe = " + ingred.getOrder() + ", StorePlace = '" + ingred.getStorePlace() + "' WHERE Ingredient_ID = '" + ingred.getId() + "';");
     }
     else {
-      executeUpdate("INSERT INTO Ingredients(Name, Available, Amount, Recipe, OrderInRecipe, StorePlace) VALUES('" + ingred.getName() + "', " + available + ", '" + ingred.getAmount() + "', " + ingred.getRecipe().getID() + ", " + ingred.getOrder() + ", '" + ingred.getStorePlace() + "')");
-      ingred.setID(readIngredientID(ingred));
+      executeUpdate("INSERT INTO Ingredients(Name, Available, Amount, Recipe, OrderInRecipe, StorePlace) VALUES('" + ingred.getName() + "', " + available + ", '" + ingred.getAmount() + "', " + ingred.getRecipe().getId() + ", " + ingred.getOrder() + ", '" + ingred.getStorePlace() + "')");
+      ingred.setId(readIngredientID(ingred));
 
       // System.out.println(ingred.getName() +
       // " is a new Ingredient an has the ID: " + ingred.getID());
-      executeUpdate("INSERT INTO Recipes_Ingredients(Recipe, Ingredient) VALUES(" + ingred.getRecipe().getID() + ", " + ingred.getID() + ")");
+      executeUpdate("INSERT INTO Recipes_Ingredients(Recipe, Ingredient) VALUES(" + ingred.getRecipe().getId() + ", " + ingred.getId() + ")");
     }
   }
 
@@ -580,7 +571,7 @@ public class DataBaseControl {
       int recipeID = (Integer) idRow.get(0);
       boolean contains = false;
       for (Recipe recipe : recipes) {
-        if (recipe.getID() == recipeID) {
+        if (recipe.getId() == recipeID) {
           contains = true;
         }
       }
@@ -598,14 +589,14 @@ public class DataBaseControl {
   }
 
   private void removeDeletedIngredients(Recipe recipe) {
-    ResultSet selectIngredientIDs = executeQuery("SELECT * FROM Recipes_Ingredients WHERE Recipe = " + recipe.getID() + ";");
+    ResultSet selectIngredientIDs = executeQuery("SELECT * FROM Recipes_Ingredients WHERE Recipe = " + recipe.getId() + ";");
     ArrayList<ArrayList<Object>> resultSelectIngredientIDs = extractResultData(selectIngredientIDs, 2);
     for (ArrayList<Object> idRow : resultSelectIngredientIDs) {
       int recipeID = (Integer) idRow.get(0);
       int ingredientID = (Integer) idRow.get(1);
       boolean contains = false;
       for (Ingredient ingred : recipe.getIngredients()) {
-        if (ingred.getID() == ingredientID) contains = true;
+        if (ingred.getId() == ingredientID) contains = true;
       }
       if (!contains) {
         executeUpdate("DELETE FROM Recipes_Ingredients WHERE Recipe = " + recipeID + " AND Ingredient = " + ingredientID + ";");
@@ -621,7 +612,7 @@ public class DataBaseControl {
   }
 
   private int readIngredientID(Ingredient ingred) {
-    ResultSet select = executeQuery("SELECT Ingredient_ID FROM Ingredients WHERE Name = '" + ingred.getName() + "' AND Amount = '" + ingred.getAmount() + "' AND Recipe = " + ingred.getRecipe().getID() + ";");
+    ResultSet select = executeQuery("SELECT Ingredient_ID FROM Ingredients WHERE Name = '" + ingred.getName() + "' AND Amount = '" + ingred.getAmount() + "' AND Recipe = " + ingred.getRecipe().getId() + ";");
     ArrayList<ArrayList<Object>> resultSelect = extractResultData(select, 1);
     return (Integer) resultSelect.get(0).get(0);
   }
@@ -644,7 +635,7 @@ public class DataBaseControl {
 
   public String generateChangeMessage(Recipe recipe) {
     String result = "";
-    if (recipe.getID() > -1) {
+    if (recipe.getId() > -1) {
       if (recipe.getValueChangedMap().get(0)) {
         result += languageBundle.getString("Name") + " ,";
       }

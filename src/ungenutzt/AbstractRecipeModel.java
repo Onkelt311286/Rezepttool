@@ -81,7 +81,7 @@ public abstract class AbstractRecipeModel extends AbstractTableModel {
   public Recipe getRecipeByID(int id) {
     Recipe result = null;
     for (Recipe recipe : recipes) {
-      if (recipe.getID() == id) {
+      if (recipe.getId() == id) {
         result = recipe;
         break;
       }
