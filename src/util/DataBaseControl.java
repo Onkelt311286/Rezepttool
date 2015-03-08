@@ -274,7 +274,7 @@ public class DataBaseControl {
       ResultSet selectIngredientIDs = executeQuery("SELECT * FROM RecipeIngredients WHERE Recipe = " + id + ";");
       ArrayList<ArrayList<Object>> resultSelectIngredientIDs = extractResultData(selectIngredientIDs, 2);
       for (ArrayList<Object> idRow : resultSelectIngredientIDs) {
-        Ingredient ingred = loadIngredient(recipe, (int) idRow.get(1));
+        Ingredient ingred = loadIngredient((int) idRow.get(0));
         ingredients.add(ingred);
       }
       Collections.sort(ingredients);
@@ -285,11 +285,12 @@ public class DataBaseControl {
         String type = loadType(recipe, (int) idRow.get(1));
         types.add(type);
       }
+      Collections.sort(types);
     }
     return recipe;
   }
 
-  private Ingredient loadIngredient(Recipe recipe, int id) {
+  private Ingredient loadIngredient(int id) {
     Ingredient ingred = null;
 
     ResultSet selectIngredients = executeQuery("SELECT * FROM Ingredients WHERE IngredientID = " + id + ";");
