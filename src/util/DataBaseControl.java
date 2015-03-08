@@ -436,8 +436,8 @@ public class DataBaseControl {
 
   private boolean isRecipeAltered(Recipe recipe) {
     boolean result = false;
-    if (recipe.getID() > -1) {
-      Recipe storedRecipe = loadRecipe(recipe.getID());
+    if (recipe.getId() > -1) {
+      Recipe storedRecipe = loadRecipe(recipe.getId());
       if (recipe.compareTo(storedRecipe) > 0) {
         result = true;
       }
@@ -505,12 +505,12 @@ public class DataBaseControl {
       executeUpdate("UPDATE Ingredients SET Name = '" + ingred.getName() + "', Available = " + available + ", Amount = '" + ingred.getAmount() + "', OrderInRecipe = " + ingred.getOrder() + ", StorePlace = '" + ingred.getStorePlace() + "' WHERE Ingredient_ID = '" + ingred.getID() + "';");
     }
     else {
-      executeUpdate("INSERT INTO Ingredients(Name, Available, Amount, Recipe, OrderInRecipe, StorePlace) VALUES('" + ingred.getName() + "', " + available + ", '" + ingred.getAmount() + "', " + ingred.getRecipe().getID() + ", " + ingred.getOrder() + ", '" + ingred.getStorePlace() + "')");
+      executeUpdate("INSERT INTO Ingredients(Name, Available, Amount, Recipe, OrderInRecipe, StorePlace) VALUES('" + ingred.getName() + "', " + available + ", '" + ingred.getAmount() + "', " + ingred.getRecipe().getId() + ", " + ingred.getOrder() + ", '" + ingred.getStorePlace() + "')");
       ingred.setID(readIngredientID(ingred));
 
       // System.out.println(ingred.getName() +
       // " is a new Ingredient an has the ID: " + ingred.getID());
-      executeUpdate("INSERT INTO Recipes_Ingredients(Recipe, Ingredient) VALUES(" + ingred.getRecipe().getID() + ", " + ingred.getID() + ")");
+      executeUpdate("INSERT INTO Recipes_Ingredients(Recipe, Ingredient) VALUES(" + ingred.getRecipe().getId() + ", " + ingred.getID() + ")");
     }
   }
 
@@ -580,7 +580,7 @@ public class DataBaseControl {
       int recipeID = (Integer) idRow.get(0);
       boolean contains = false;
       for (Recipe recipe : recipes) {
-        if (recipe.getID() == recipeID) {
+        if (recipe.getId() == recipeID) {
           contains = true;
         }
       }
@@ -598,7 +598,7 @@ public class DataBaseControl {
   }
 
   private void removeDeletedIngredients(Recipe recipe) {
-    ResultSet selectIngredientIDs = executeQuery("SELECT * FROM Recipes_Ingredients WHERE Recipe = " + recipe.getID() + ";");
+    ResultSet selectIngredientIDs = executeQuery("SELECT * FROM Recipes_Ingredients WHERE Recipe = " + recipe.getId() + ";");
     ArrayList<ArrayList<Object>> resultSelectIngredientIDs = extractResultData(selectIngredientIDs, 2);
     for (ArrayList<Object> idRow : resultSelectIngredientIDs) {
       int recipeID = (Integer) idRow.get(0);
@@ -621,7 +621,7 @@ public class DataBaseControl {
   }
 
   private int readIngredientID(Ingredient ingred) {
-    ResultSet select = executeQuery("SELECT Ingredient_ID FROM Ingredients WHERE Name = '" + ingred.getName() + "' AND Amount = '" + ingred.getAmount() + "' AND Recipe = " + ingred.getRecipe().getID() + ";");
+    ResultSet select = executeQuery("SELECT Ingredient_ID FROM Ingredients WHERE Name = '" + ingred.getName() + "' AND Amount = '" + ingred.getAmount() + "' AND Recipe = " + ingred.getRecipe().getId() + ";");
     ArrayList<ArrayList<Object>> resultSelect = extractResultData(select, 1);
     return (Integer) resultSelect.get(0).get(0);
   }
@@ -644,7 +644,7 @@ public class DataBaseControl {
 
   public String generateChangeMessage(Recipe recipe) {
     String result = "";
-    if (recipe.getID() > -1) {
+    if (recipe.getId() > -1) {
       if (recipe.getValueChangedMap().get(0)) {
         result += languageBundle.getString("Name") + " ,";
       }

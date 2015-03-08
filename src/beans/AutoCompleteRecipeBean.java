@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -25,18 +26,24 @@ import util.ServeletBackbone;
 public class AutoCompleteRecipeBean {
 
   private String filterString;
+  private List<Recipe> recipes;
+  
+  @PostConstruct
+  public void init() {
+	recipes = ServeletBackbone.DataBaseControl.loadFilteredRecipesByName("");
+  }
 
   public AutoCompleteRecipeBean() {
   }
 
   public List<String> completeText(String query) {
-    List<Recipe> recipes = ServeletBackbone.DataBaseControl.loadFilteredRecipesByName(query.toUpperCase());
+    recipes = ServeletBackbone.DataBaseControl.loadFilteredRecipesByName(query.toUpperCase());
     List<String> results = new ArrayList<String>();
     for (Recipe recipe : recipes) {
       results.add(recipe.getName());
     }
     return results;
-  }
+  } 
 
   public String getFilterString() {
     return filterString;
@@ -44,5 +51,13 @@ public class AutoCompleteRecipeBean {
 
   public void setFilterString(String filterString) {
     this.filterString = filterString;
+  }
+  
+  public List<Recipe> getRecipes() {
+	return recipes;
+  }
+
+  public void setRecipes(List<Recipe> recipes) {
+	this.recipes = recipes;
   }
 }

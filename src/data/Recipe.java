@@ -99,7 +99,7 @@ public class Recipe implements Serializable, Comparable<Recipe> {
     result += checkValue(!formula.equals(compareRecipe.getFormula()), 2);
     result += checkValue(!duration.equals(compareRecipe.getDuration()), 3);
 //    result += checkValue(!type.equals(compareRecipe.getType()), 4);
-    result += checkValue(id != compareRecipe.getID(), 6);
+    result += checkValue(id != compareRecipe.getId(), 6);
 
     boolean ingredChanged = false;
     for (Ingredient ingredient : ingredients) {
@@ -165,11 +165,11 @@ public class Recipe implements Serializable, Comparable<Recipe> {
     name = value;
   }
 
-  public int getID() {
+  public int getId() {
     return id;
   }
 
-  public void setID(int id) {
+  public void setId(int id) {
     this.id = id;
   }
 

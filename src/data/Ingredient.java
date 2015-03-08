@@ -97,7 +97,7 @@ public class Ingredient implements Serializable, Comparable<Ingredient> {
       result += 100;
     }
     result += checkValue(id != compareIngredient.getID(), 3);
-    result += checkValue(_recipe.getID() != compareIngredient.getRecipe().getID(), 4);
+    result += checkValue(_recipe.getId() != compareIngredient.getRecipe().getId(), 4);
     result += checkValue(_order != compareIngredient.getOrder(), 5);
     result += checkValue(!storePlace.equals(compareIngredient.getStorePlace()), 6);
 
