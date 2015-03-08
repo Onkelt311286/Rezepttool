@@ -27,29 +27,22 @@
 			    
 				<p:autoComplete id="filter" dropdown="true" scrollHeight="250"
 							placeholder="Rezepte durchsuchen..." emptyMessage="Keine Treffer"
-							value="#{autoCompleteRecipeBean.filterString}" completeMethod="#{autoCompleteRecipeBean.completeText}" />
+							value="#{autoCompleteRecipeBean.filterString}" completeMethod="#{autoCompleteRecipeBean.completeText}" >
+				</p:autoComplete>
 			</h:form>
 		</f:facet>
 	</p:toolbar>
 	<div id="content">
-	    <p:dataScroller value="#{dataScrollerView.recipe}" var="recipe" chunkSize="10">
+	    <p:dataScroller value="#{autoCompleteRecipeBean.recipes}" var="recipe" id="recipeScroller" chunkSize="10" mode="inline" scrollHeight="800">
             
-            <p:panel styleClass="toggleable" header="TODO #javaClass.recipeTitle" footer="TODO #javaClass.recipeTime" toggleable="true" widgetVar="panel" style="margin-bottom:20px">
+            <p:panel styleClass="toggleable" header="#{recipe.name}" toggleable="true" widgetVar="panel#{recipe.id}" style="margin-bottom:10px">
 		    	<h:panelGrid columns="2" cellpadding="10" width="100%">
 		            <h:graphicImage value="../images/icons/pot.png" />
-		            <h:outputText value="TODO #javaClass.recipeDescription - Panel in den DataScroller hineinlegen - Image mit value ../images/recipes/#javaClass.recipeImage versehen" />
+		            <h:outputText value="#{recipe.formula}" />
 		        </h:panelGrid>
 		    </p:panel>
 		    
-	    </p:dataScroller>
-	    
-	    	<p:panel styleClass="toggleable" header="TODO #javaClass.recipeTitle" footer="TODO #javaClass.recipeTime" toggleable="true" widgetVar="panel" style="margin-bottom:20px">
-		    	<h:panelGrid columns="2" cellpadding="10" width="100%">
-		            <h:graphicImage value="../images/recipes/mozzarella-tomaten-salat.jpg" />
-		            <h:outputText value="TODO #javaClass.recipeDescription - Panel in den DataScroller hineinlegen - Image mit value ../images/recipes/#javaClass.recipeImage versehen" />
-		        </h:panelGrid>
-		    </p:panel>
-		    
+	    </p:dataScroller>    
 	</div>
 	<h:form id="menubar">
 		<p:tabMenu activeIndex="1" orientation="bottom">
@@ -63,6 +56,8 @@
 	<script type="text/javascript">
 		$("#menubar").height($(".ui-tabmenu").height());
 		$("#content").height(window.innerHeight - $("#toolbar").height() - $(".ui-tabmenu").height() - 10);
+		$("#recipeScroller").attr('scrollHeight',($("#content").height() - 10));
+		$(".ui-datascroller-content").css('height',($("#content").height() - 10));
 	</script>
 </h:body>
 </html>
