@@ -30,6 +30,7 @@
 							placeholder="Rezepte durchsuchen..." emptyMessage="Keine Treffer"
 							value="#{autoCompleteRecipeBean.filterString}" completeMethod="#{autoCompleteRecipeBean.completeText}" >
 								<p:ajax event="query" listener="#{autoCompleteRecipeBean.handleSelect}" resetValues="true" update="recipeList" />
+								<p:ajax event="itemSelect" listener="#{autoCompleteRecipeBean.handleSelect}" resetValues="true" update="recipeList" />
 				</p:autoComplete>
 				
 			</f:facet>
