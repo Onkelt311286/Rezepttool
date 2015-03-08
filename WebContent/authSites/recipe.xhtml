@@ -9,9 +9,10 @@
 	<link href="./../css/styles.css" rel="stylesheet" type="text/css" />
 </h:head>
 <h:body>
-	<p:toolbar id="toolbar">
-		<f:facet name="left">
-			<h:form>			
+	<h:form>
+		<p:toolbar id="toolbar">
+			<f:facet name="left">
+					
 				<p:commandButton id="options" style="margin-right: 1% !important;" title="Optionen" type="button" icon="settings"/>
 			    <p:menu toggleable="true" overlay="true" trigger="options" my="left top" at="left bottom">
 			        <p:menuitem value="Seite Drucken" />
@@ -28,22 +29,24 @@
 				<p:autoComplete id="filter" dropdown="true" scrollHeight="250"
 							placeholder="Rezepte durchsuchen..." emptyMessage="Keine Treffer"
 							value="#{autoCompleteRecipeBean.filterString}" completeMethod="#{autoCompleteRecipeBean.completeText}" >
+								<p:ajax event="itemSelect" listener="#{autoCompleteRecipeBean.handleSelect}" resetValues="true" update="recipeScroller" />
 				</p:autoComplete>
-			</h:form>
-		</f:facet>
-	</p:toolbar>
-	<div id="content">
-	    <p:dataScroller value="#{autoCompleteRecipeBean.recipes}" var="recipe" id="recipeScroller" chunkSize="10" mode="inline" scrollHeight="800">
-            
-            <p:panel styleClass="toggleable" header="#{recipe.name}" toggleable="true" widgetVar="panel#{recipe.id}" style="margin-bottom:10px">
-		    	<h:panelGrid columns="2" cellpadding="10" width="100%">
-		            <h:graphicImage value="../images/icons/pot.png" />
-		            <h:outputText value="#{recipe.formula}" />
-		        </h:panelGrid>
-		    </p:panel>
-		    
-	    </p:dataScroller>    
-	</div>
+				
+			</f:facet>
+		</p:toolbar>
+		<div id="content">
+		    <p:dataScroller value="#{autoCompleteRecipeBean.recipes}" var="recipe" widgetVar="recipeScroller" id="recipeScroller" chunkSize="10" mode="inline" scrollHeight="800">
+	            
+	            <p:panel styleClass="toggleable" header="#{recipe.name}" toggleable="true" widgetVar="panel#{recipe.id}" style="margin-bottom:10px">
+			    	<h:panelGrid columns="2" cellpadding="10" width="100%">
+			            <h:graphicImage value="../images/icons/pot.png" />
+			            <h:outputText value="#{recipe.formula}" />
+			        </h:panelGrid>
+			    </p:panel>
+			    
+		    </p:dataScroller>
+		</div>
+	</h:form>
 	<h:form id="menubar">
 		<p:tabMenu activeIndex="1" orientation="bottom">
 			<p:menuitem title="Wochenplaner" outcome="week" icon="pot" />

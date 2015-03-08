@@ -26,7 +26,7 @@ public class AuthenticationBean {
     }
     else {
       dialogVisible = true;
-      return "authSites/week?faces-redirect=true";
+      return "authSites/recipe?faces-redirect=true";
     }
   }
 
