@@ -42,9 +42,9 @@
 			    	<h:panelGrid columns="3" cellpadding="10" width="100%">
 			            <h:graphicImage value="../images/icons/pot.png" />
 			            <h:outputText value="#{recipe.formula}" />
-			            <p:dataList value="#{recipe.ingredients}" var="ingredient" type="definition">
-			            	#{ingredient.name}
-			            </p:dataList>
+			            <p:dataList value="#{recipe.ingredientAmount}" var="ingredient" type="definition">
+                    #{ingredient.value} #{ingredient.key.name} 
+                  </p:dataList>
 			        </h:panelGrid>
 			        <p:separator />
 			        <h:outputText value="#{recipe.duration}" />

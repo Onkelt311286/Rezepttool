@@ -41,6 +41,7 @@ public class AutoCompleteRecipeBean {
     for (Recipe recipe : recipes) {
       results.add(recipe.getName());
     }
+    
     return results;
   }
 

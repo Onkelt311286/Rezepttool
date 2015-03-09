@@ -66,7 +66,7 @@
 --select a.name, b.name, d.amount, d.orderinrecipe
 --from recipes a, ingredients b, recipeingredients d
 --where d.ingredient = b.ingredientid
---and d.recipe = a.recipeid
+--and d.recipe = a.recipeid;
 --
 --insert into RecipeIngredients(Ingredient, Recipe, Amount, OrderInRecipe)
 --select b.IngredientID, c.RecipeID, a.amount, a.orderinrecipe

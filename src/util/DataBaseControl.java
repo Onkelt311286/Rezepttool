@@ -262,30 +262,27 @@ public class DataBaseControl {
     for (ArrayList<Object> recipeRow : resultSelectRecipes) {
       String name = (String) recipeRow.get(0);
       String formula = (String) recipeRow.get(1);
-      ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
-      ArrayList<String> types = new ArrayList<String>();
       String duration = (String) recipeRow.get(2);
       long frequency = calculateFrequency(id);
-      recipe = new Recipe(id, name, formula, duration, ingredients, types, frequency);
+      recipe = new Recipe(id, name, formula, duration, frequency);
 
-      // TODO: über recipeIngredients amount und order auslesen. <-- wird Teil
-      // des Rezeptes, wird dann am besten in zwei Maps<Ingredient, String>
-      // gespeichert
       ResultSet selectIngredientIDs = executeQuery("SELECT * FROM RecipeIngredients WHERE Recipe = " + id + ";");
-      ArrayList<ArrayList<Object>> resultSelectIngredientIDs = extractResultData(selectIngredientIDs, 2);
+      ArrayList<ArrayList<Object>> resultSelectIngredientIDs = extractResultData(selectIngredientIDs, 4);
       for (ArrayList<Object> idRow : resultSelectIngredientIDs) {
         Ingredient ingred = loadIngredient((int) idRow.get(0));
-        ingredients.add(ingred);
+        String amount = (String) idRow.get(2);
+        Integer order = (Integer) idRow.get(3);
+        recipe.addIngredient(ingred);
+        recipe.addIngredientAmount(ingred, amount);
+        recipe.addIngredientOrder(ingred, order);
       }
-      Collections.sort(ingredients);
 
       ResultSet selectTypeIDs = executeQuery("SELECT * FROM RecipeTypes WHERE Recipe = " + id + ";");
       ArrayList<ArrayList<Object>> resultSelectTypeIDs = extractResultData(selectTypeIDs, 2);
       for (ArrayList<Object> idRow : resultSelectTypeIDs) {
         String type = loadType(recipe, (int) idRow.get(1));
-        types.add(type);
+        recipe.addType(type);
       }
-      Collections.sort(types);
     }
     return recipe;
   }

@@ -3,22 +3,29 @@ package data;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import util.ToolConstants;
 
 public class Recipe implements Serializable, Comparable<Recipe> {
 
-  private static final long     serialVersionUID = -4849235700318146994L;
-  private static final int      bitSetLength     = 10;
-  private String                name;
-  private ArrayList<Ingredient> ingredients;
-  private boolean               used;
-  private String                formula;
-  private int                   id;
-  private String                duration;
-  private ArrayList<String>     types;
-  private BitSet                valueChangedMap;
-  private long                  frequency;
+  private static final long        serialVersionUID = -4849235700318146994L;
+  private static final int         bitSetLength     = 10;
+  private String                   name;
+  private boolean                  used;
+  private String                   formula;
+  private int                      id;
+  private String                   duration;
+  private BitSet                   valueChangedMap;
+  private long                     frequency;
+
+  private ArrayList<Ingredient>    ingredients;
+  private ArrayList<String>        types;
+  private Map<Ingredient, String>  ingredientAmountMap;
+  private Map<Ingredient, Integer> ingredientOrderMap;
 
   // public Recipe(String name) {
   // _name = name;
@@ -73,7 +80,7 @@ public class Recipe implements Serializable, Comparable<Recipe> {
   // _valueChangedMap = new BitSet(bitSetLength);
   // }
 
-  public Recipe(int id, String name, String formula, String duration, ArrayList<Ingredient> ingredients, ArrayList<String> types, long frequency) {
+  public Recipe(int id, String name, String formula, String duration, long frequency) {
     this.id = id;
     this.name = name;
     if (this.name.contains("Chefkoch.de Rezept: ")) {
@@ -84,9 +91,13 @@ public class Recipe implements Serializable, Comparable<Recipe> {
     }
     this.formula = formula;
     this.duration = duration;
-    this.ingredients = ingredients;
-    this.types = types;
     this.frequency = frequency;
+
+    ingredients = new ArrayList<Ingredient>();
+    types = new ArrayList<String>();
+    ingredientAmountMap = new HashMap<Ingredient, String>();
+    ingredientOrderMap = new HashMap<Ingredient, Integer>();
+
     valueChangedMap = new BitSet(bitSetLength);
   }
 
@@ -145,6 +156,28 @@ public class Recipe implements Serializable, Comparable<Recipe> {
 
   public void addIngredient(Ingredient ingred) {
     ingredients.add(ingred);
+  }
+
+  public void addType(String type) {
+    types.add(type);
+  }
+
+  public void addIngredientAmount(Ingredient ingred, String amount) {
+    ingredientAmountMap.put(ingred, amount);
+  }
+
+  public void addIngredientOrder(Ingredient ingred, Integer order) {
+    ingredientOrderMap.put(ingred, order);
+  }
+
+  public List<Map.Entry<Ingredient, String>> getIngredientAmount() {
+    Set<Map.Entry<Ingredient, String>> ingredientAmountSet = ingredientAmountMap.entrySet();
+    return new ArrayList<Map.Entry<Ingredient, String>>(ingredientAmountSet);
+  }
+  
+  public List<Map.Entry<Ingredient, Integer>> getIngredientOrder() {
+    Set<Map.Entry<Ingredient, Integer>> ingredientOrderSet = ingredientOrderMap.entrySet();
+    return new ArrayList<Map.Entry<Ingredient, Integer>>(ingredientOrderSet);
   }
 
   public ArrayList<Ingredient> getIngredients() {
@@ -209,5 +242,21 @@ public class Recipe implements Serializable, Comparable<Recipe> {
 
   public void setFrequency(long frequency) {
     this.frequency = frequency;
+  }
+
+  public Map<Ingredient, String> getIngredientAmountMap() {
+    return ingredientAmountMap;
+  }
+
+  public void setIngredientAmountMap(Map<Ingredient, String> ingredientAmountMap) {
+    this.ingredientAmountMap = ingredientAmountMap;
+  }
+
+  public Map<Ingredient, Integer> getIngredientOrderMap() {
+    return ingredientOrderMap;
+  }
+
+  public void setIngredientOrderMap(Map<Ingredient, Integer> ingredientOrderMap) {
+    this.ingredientOrderMap = ingredientOrderMap;
   }
 }

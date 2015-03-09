@@ -36,6 +36,7 @@ Panelliste mit Bild, Titel, Zeit und Beschreibung (max Length, auf- und zuklappb
 --> Auswahl des Rezepts führt zur Detailansicht (zum bearbeiten)
 --> Alternativ Zutaten angeben und auswählen
 ---> In der Matching Tabelle RecipeIngredients eine neue Spalte für alternative Zutat
+http://stackoverflow.com/questions/9074177/displaying-hashmap-keys-and-values-in-a-primefaces-datatable
 
 Rezept Detailansichts Seite anlegen und stylen.
 
